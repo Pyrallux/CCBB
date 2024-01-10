@@ -4,7 +4,6 @@ import ButtonGroup from "../components/ButtonGroup";
 
 const handleSelectItem = (element: string) => {
   console.log(`Selected Element: ${element}`);
-  let cycleCountId = element;
 };
 
 const handleClick = (label: string) => {
