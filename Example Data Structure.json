@@ -1,0 +1,143 @@
+{
+	"warehouse": 
+[
+    {
+		"name": "PWH",
+        "manual": true,
+        "cycle": 
+        [
+            {
+            "name": "Cycle1",
+            "date": "2024-2-10",
+            "bin": [
+                {
+                "name": "R01A",
+                "parts_present":
+                [
+                    {
+                        "number": "3006630",
+                        "quantity": 10
+                    },
+                    {
+                        "number": "5660156",
+                        "quantity": 26
+                    }
+                ],
+                "parts_in_system":
+                [
+                    {
+                        "number": "3006630",
+                        "quantity": 9.25
+                    },
+                    {
+                        "number": "3006631",
+                        "quantity": 20
+                    }
+                ]
+                }
+            ]
+        },
+        {
+            "name": "Cycle2",
+            "date": "2024-2-11",
+            "bin": [
+                {
+                "name": "R02A",
+                "parts_present":
+                [
+                    {
+                        "number": "3006630",
+                        "quantity": 10
+                    },
+                    {
+                        "number": "5660156",
+                        "quantity": 26
+                    }
+                ],
+                "parts_in_system":
+                [
+                    {
+                        "number": "3006630",
+                        "quantity": 9.25
+                    },
+                    {
+                        "number": "3006631",
+                        "quantity": 20
+                    }
+                ]
+                }
+            ]
+        }
+    ]
+	},
+    {
+		"name": "FGWH",
+        "manual": false,
+        "cycle": 
+        [
+            {
+            "name": "Cycle1",
+            "date": "2024-2-10",
+            "bin": [
+                {
+                "name": "P01A",
+                "parts_present":
+                [
+                    {
+                        "number": "3006630",
+                        "quantity": 10
+                    },
+                    {
+                        "number": "5660156",
+                        "quantity": 26
+                    }
+                ],
+                "parts_in_system":
+                [
+                    {
+                        "number": "3006630",
+                        "quantity": 9.25
+                    },
+                    {
+                        "number": "3006631",
+                        "quantity": 20
+                    }
+                ]
+                }
+            ]
+        },
+        {
+            "name": "Cycle2",
+            "date": "2024-2-11",
+            "bin": [
+                {
+                "name": "P02A",
+                "parts_present":
+                [
+                    {
+                        "number": "3006630",
+                        "quantity": 10
+                    },
+                    {
+                        "number": "5660156",
+                        "quantity": 26
+                    }
+                ],
+                "parts_in_system":
+                [
+                    {
+                        "number": "3006630",
+                        "quantity": 9.25
+                    },
+                    {
+                        "number": "3006631",
+                        "quantity": 20
+                    }
+                ]
+                }
+            ]
+        }
+    ]
+	}
+]
+}

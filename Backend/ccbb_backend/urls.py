@@ -16,10 +16,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from ccbb_backend import views
+from . import views
+from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('warehouses/', views.warehouse_list),
+    path('warehouses/<int:id>', views.warehouse_detail),
     path('cycles/', views.cycle_list),
+    path('cycles/<int:id>', views.cycle_detail),
+    path('bins/', views.bin_list),
+    path('bins/<int:id>', views.bin_detail),
+    path('presentParts/', views.presentPart_list),
+    path('presentParts/<int:id>', views.presentPart_detail),
+    path('systemParts/', views.systemPart_list),
+    path('systemParts/<int:id>', views.systemPart_detail),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
