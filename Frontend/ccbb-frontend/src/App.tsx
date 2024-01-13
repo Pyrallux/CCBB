@@ -3,9 +3,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Setup from "./pages/Setup";
 import SelectWarehouse from "./pages/SelectWarehouse";
 import AddWarehouse from "./pages/AddWarehouse";
+import EditWarehouse from "./pages/EditWarehouse";
 import Home from "./pages/Home";
 import SelectCycle from "./pages/SelectCycle";
 import CycleCount from "./pages/CycleCount";
+
+const backend_path = "http://127.0.0.1:8000/";
 
 export const AppContext = createContext<{
   whse: string;
@@ -38,6 +41,7 @@ function App() {
             <Route path="/Setup" element={<Setup />} />
             <Route path="/SelectWarehouse" element={<SelectWarehouse />} />
             <Route path="/AddWarehouse" element={<AddWarehouse />} />
+            <Route path="/EditWarehouse" element={<EditWarehouse />} />
             <Route path="/SelectCycle" element={<SelectCycle />} />
             <Route path="/CycleCount" element={<CycleCount />} />
             <Route path="*" element={<Home />} />
