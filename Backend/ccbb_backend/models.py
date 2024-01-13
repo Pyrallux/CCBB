@@ -1,10 +1,41 @@
 from django.db import models
 
+# REMINDER! Add all model fields to serializer.
+
 class Warehouse(models.Model):
 	warehouse_id = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=100)
 	manual = models.BooleanField()
-	
+	path = models.CharField(max_length=100, blank=True, default='')
+	abc_code_path = models.CharField(max_length=100, blank=True, default='')
+	cycles_per_year = models.IntegerField(blank=True, default=0)
+
+class PhysicallyMissingPart(models.Model):
+	physically_missing_part_id = models.AutoField(primary_key=True)
+	number = models.CharField(max_length=100)
+	quantity = models.FloatField()
+	location = models.CharField(max_length=100)
+	date = models.DateField()
+	warehouse_id = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
+
+class SystematicallyMissingPart(models.Model):
+	systematically_missing_part_id = models.AutoField(primary_key=True)
+	number = models.CharField(max_length=100)
+	quantity = models.FloatField()
+	location = models.CharField(max_length=100)
+	date = models.DateField()
+	warehouse_id = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
+
+class Transaction(models.Model):
+	transaction_id = models.AutoField(primary_key=True)
+	part_number = models.CharField(max_length=100)
+	old_location = models.CharField(max_length=100)
+	new_location = models.CharField(max_length=100)
+	quantity = models.FloatField()
+	date = models.DateField()
+	warehouse_id = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
+	# Register Model in Serializer
+
 class Cycle(models.Model):
 	cycle_id = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=100)
@@ -17,13 +48,13 @@ class Bin(models.Model):
 	cycle_id = models.ForeignKey(Cycle, on_delete=models.CASCADE)
 
 class PresentPart(models.Model):
-	presentPart_id = models.AutoField(primary_key=True)
+	present_part_id = models.AutoField(primary_key=True)
 	number = models.CharField(max_length=100)
 	quantity = models.FloatField()
 	bin_id = models.ForeignKey(Cycle, on_delete=models.CASCADE)
 	
 class SystemPart(models.Model):
-	systemPart_id = models.AutoField(primary_key=True)
+	system_part_id = models.AutoField(primary_key=True)
 	number = models.CharField(max_length=100)
 	quantity = models.FloatField(max_length=100)
 	bin_id = models.ForeignKey(Cycle, on_delete=models.CASCADE)

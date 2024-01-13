@@ -12,20 +12,27 @@ export const AppContext = createContext<{
   setWhse: (newValue: string) => void;
   cycle: string;
   setCycle: (newValue: string) => void;
+  manual: boolean;
+  setManual: (newValue: boolean) => void;
 }>({
   whse: "",
   setWhse: () => undefined,
   cycle: "",
   setCycle: () => undefined,
+  manual: false,
+  setManual: () => undefined,
 });
 
 function App() {
   const [whse, setWhse] = useState("");
   const [cycle, setCycle] = useState("");
+  const [manual, setManual] = useState(false);
 
   return (
     <div className="App">
-      <AppContext.Provider value={{ whse, setWhse, cycle, setCycle }}>
+      <AppContext.Provider
+        value={{ whse, setWhse, cycle, setCycle, manual, setManual }}
+      >
         <Router>
           <Routes>
             <Route path="/Setup" element={<Setup />} />
