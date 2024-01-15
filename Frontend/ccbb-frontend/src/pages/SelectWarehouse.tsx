@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../App";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -6,17 +6,37 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ButtonGroup from "../components/ButtonGroup";
 import ListGroup from "../components/ListGroup";
+import { useQuery } from "@tanstack/react-query";
+import { getWarehouses } from "../api/warehousesApi";
 
 interface Data {
   whse: string;
 }
 
+// Specifies the structure of warehouse data model (accessed through api)
+interface WarehouseData {
+  warehouse_id?: number;
+  name: string;
+  path?: string;
+  abc_code_path?: string;
+  cycles_per_year?: number;
+  manual?: boolean;
+}
+
 function SelectWarehouse() {
   const { whse, setWhse } = useContext(AppContext);
+  const [warehouseList, setWarehouseList] = useState([]);
   const navigate = useNavigate();
 
-  // ** MISSING ** pull warehouse list from database
-  const warehouse_list: string[] = ["Example1", "Example2", "Example3"]; // Example List
+  const {
+    isLoading,
+    isError,
+    error,
+    data: warehouses,
+  } = useQuery({
+    queryKey: ["getWarehouseList"],
+    queryFn: () => getWarehouses(), // ** REMINDER ** This should query the warehouse selected
+  });
 
   // Setup Yup Form Schema
   const schema = yup.object().shape({
@@ -51,6 +71,21 @@ function SelectWarehouse() {
       navigate("/AddWarehouse");
     }
   };
+
+  // Shows loading/error screen until query is returned successfully
+  if (isLoading) {
+    return <h1>Fetching Data From Database...</h1>;
+  } else if (isError) {
+    return <p>{error.message}</p>;
+  }
+
+  const warehouse_list: string[] = [];
+  for (let i = 0; i < warehouses.length; i++) {
+    if (!warehouses[i].hasOwnProperty("name")) {
+      continue;
+    }
+    warehouse_list.push(warehouses[i].name);
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

@@ -34,7 +34,6 @@ class Transaction(models.Model):
 	quantity = models.FloatField()
 	date = models.DateField()
 	warehouse_id = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
-	# Register Model in Serializer
 
 class Cycle(models.Model):
 	cycle_id = models.AutoField(primary_key=True)

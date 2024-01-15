@@ -7,8 +7,7 @@ import EditWarehouse from "./pages/EditWarehouse";
 import Home from "./pages/Home";
 import SelectCycle from "./pages/SelectCycle";
 import CycleCount from "./pages/CycleCount";
-
-const backend_path = "http://127.0.0.1:8000/";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export const AppContext = createContext<{
   whse: string;
@@ -27,27 +26,31 @@ export const AppContext = createContext<{
 });
 
 function App() {
+  const client = new QueryClient();
+
   const [whse, setWhse] = useState("");
   const [cycle, setCycle] = useState("");
   const [manual, setManual] = useState(false);
 
   return (
     <div className="App">
-      <AppContext.Provider
-        value={{ whse, setWhse, cycle, setCycle, manual, setManual }}
-      >
-        <Router>
-          <Routes>
-            <Route path="/Setup" element={<Setup />} />
-            <Route path="/SelectWarehouse" element={<SelectWarehouse />} />
-            <Route path="/AddWarehouse" element={<AddWarehouse />} />
-            <Route path="/EditWarehouse" element={<EditWarehouse />} />
-            <Route path="/SelectCycle" element={<SelectCycle />} />
-            <Route path="/CycleCount" element={<CycleCount />} />
-            <Route path="*" element={<Home />} />
-          </Routes>
-        </Router>
-      </AppContext.Provider>
+      <QueryClientProvider client={client}>
+        <AppContext.Provider
+          value={{ whse, setWhse, cycle, setCycle, manual, setManual }}
+        >
+          <Router>
+            <Routes>
+              <Route path="/Setup" element={<Setup />} />
+              <Route path="/SelectWarehouse" element={<SelectWarehouse />} />
+              <Route path="/AddWarehouse" element={<AddWarehouse />} />
+              <Route path="/EditWarehouse" element={<EditWarehouse />} />
+              <Route path="/SelectCycle" element={<SelectCycle />} />
+              <Route path="/CycleCount" element={<CycleCount />} />
+              <Route path="*" element={<Home />} />
+            </Routes>
+          </Router>
+        </AppContext.Provider>
+      </QueryClientProvider>
     </div>
   );
 }

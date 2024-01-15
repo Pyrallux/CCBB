@@ -6,7 +6,7 @@ from .models import Warehouse, PhysicallyMissingPart, SystematicallyMissingPart,
 class WarehouseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Warehouse
-        fields = ['warehouse_id', 'name', 'manual', 'path']
+        fields = ['warehouse_id', 'name', 'manual', 'path', 'abc_code_path', 'cycles_per_year']
 
 class PhysicallyMissingPartSerializer(serializers.ModelSerializer):
     warehouse_id = serializers.PrimaryKeyRelatedField(read_only = True)
