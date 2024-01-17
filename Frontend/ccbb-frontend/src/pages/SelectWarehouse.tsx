@@ -6,41 +6,34 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ButtonGroup from "../components/ButtonGroup";
 import ListGroup from "../components/ListGroup";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getWarehouses } from "../api/warehousesApi";
 
 interface Data {
-  whse: string;
-}
-
-// Specifies the structure of warehouse data model (accessed through api)
-interface WarehouseData {
-  warehouse_id?: number;
-  name: string;
-  path?: string;
-  abc_code_path?: string;
-  cycles_per_year?: number;
-  manual?: boolean;
+  warehouse: number;
 }
 
 function SelectWarehouse() {
-  const { whse, setWhse } = useContext(AppContext);
-  const [warehouseList, setWarehouseList] = useState([]);
+  const queryClient = useQueryClient();
+  const [warehouseList, setWarehouseList] = useState(["Loading..."]);
+  const [warehouseListKeys, setWarehouseListKeys] = useState([0]);
+  const { setWhse } = useContext(AppContext);
   const navigate = useNavigate();
 
   const {
     isLoading,
     isError,
     error,
+    refetch,
     data: warehouses,
   } = useQuery({
     queryKey: ["getWarehouseList"],
-    queryFn: () => getWarehouses(), // ** REMINDER ** This should query the warehouse selected
+    queryFn: () => getWarehouses(),
   });
 
   // Setup Yup Form Schema
   const schema = yup.object().shape({
-    whse: yup.string().required("*Warehouse Selection is Required"),
+    warehouse: yup.number().required("*Warehouse Selection is Required"),
   });
 
   // Setup React-Hook-Form Structure
@@ -55,14 +48,14 @@ function SelectWarehouse() {
 
   const onSubmit = (data: Data) => {
     console.log(data);
-    setWhse(data.whse);
+    setWhse(warehouseListKeys[data.warehouse]);
     // ** MISSING ** send submitted warehouse data to database and continue
     navigate("/SelectCycle");
   };
 
-  const handleSelectItem = (element: string) => {
-    console.log(`Selected Element: ${element}`);
-    setValue("whse", element);
+  const handleSelectItem = (index: number) => {
+    console.log(`Selected Element: ${index}`);
+    setValue("warehouse", index);
   };
 
   const handleClick = (label: string) => {
@@ -72,6 +65,30 @@ function SelectWarehouse() {
     }
   };
 
+  const handleEdit = (index: number) => {
+    console.log("Editing Warehouse:", warehouseListKeys[index]);
+    setWhse(warehouseListKeys[index]);
+    navigate("/EditWarehouse");
+  };
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ["getWarehouseList"] });
+    setTimeout(() => {
+      refetch;
+      const warehouse_list: string[] = [];
+      const warehouse_list_keys: number[] = [];
+      for (let i = 0; i < warehouses?.length; i++) {
+        if (!warehouses[i].hasOwnProperty("name")) {
+          continue;
+        }
+        warehouse_list.push(warehouses[i].name);
+        warehouse_list_keys.push(warehouses[i].warehouse_id);
+      }
+      setWarehouseList(warehouse_list);
+      setWarehouseListKeys(warehouse_list_keys);
+    }, 100);
+  }, [warehouses]);
+
   // Shows loading/error screen until query is returned successfully
   if (isLoading) {
     return <h1>Fetching Data From Database...</h1>;
@@ -79,22 +96,18 @@ function SelectWarehouse() {
     return <p>{error.message}</p>;
   }
 
-  const warehouse_list: string[] = [];
-  for (let i = 0; i < warehouses.length; i++) {
-    if (!warehouses[i].hasOwnProperty("name")) {
-      continue;
-    }
-    warehouse_list.push(warehouses[i].name);
-  }
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h2>Select A Warehouse:</h2>
       <text className="ms-3 text-danger fst-italic">
-        {errors.whse?.message}
+        {errors.warehouse?.message}
       </text>
-      <ListGroup items={warehouse_list} onSelectItem={handleSelectItem} />
-      <input type="hidden" defaultValue={whse} {...register("whse")} />
+      <ListGroup
+        items={warehouseList}
+        onSelectItem={handleSelectItem}
+        onClickEdit={handleEdit}
+      />
+      <input type="hidden" {...register("warehouse")} />
       <div>
         <ButtonGroup
           label="+ Add New Warehouse"

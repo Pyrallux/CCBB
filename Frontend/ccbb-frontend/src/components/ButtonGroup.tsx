@@ -1,7 +1,7 @@
 interface Props {
   label: string;
   type?: "submit" | "reset" | "button" | undefined;
-  style?: "primary" | "secondary" | "outline-primary";
+  style?: "primary" | "secondary" | "outline-primary" | "outline-danger";
   disabled?: boolean;
   onClick: (label: string) => void;
 }

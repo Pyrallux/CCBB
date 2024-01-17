@@ -1,7 +1,7 @@
-import WarehouseSetup from "../components/WarehouseSetup";
+import WarehouseEdit from "../components/WarehouseEdit";
 
 function EditWarehouse() {
-  return <WarehouseSetup type="Edit" />;
+  return <WarehouseEdit />;
 }
 
 export default EditWarehouse;

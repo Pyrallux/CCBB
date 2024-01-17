@@ -10,14 +10,14 @@ import CycleCount from "./pages/CycleCount";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export const AppContext = createContext<{
-  whse: string;
-  setWhse: (newValue: string) => void;
+  whse: number;
+  setWhse: (newValue: number) => void;
   cycle: string;
   setCycle: (newValue: string) => void;
   manual: boolean;
   setManual: (newValue: boolean) => void;
 }>({
-  whse: "",
+  whse: 0,
   setWhse: () => undefined,
   cycle: "",
   setCycle: () => undefined,
@@ -28,7 +28,7 @@ export const AppContext = createContext<{
 function App() {
   const client = new QueryClient();
 
-  const [whse, setWhse] = useState("");
+  const [whse, setWhse] = useState(0);
   const [cycle, setCycle] = useState("");
   const [manual, setManual] = useState(false);
 
@@ -36,7 +36,14 @@ function App() {
     <div className="App">
       <QueryClientProvider client={client}>
         <AppContext.Provider
-          value={{ whse, setWhse, cycle, setCycle, manual, setManual }}
+          value={{
+            whse,
+            setWhse,
+            cycle,
+            setCycle,
+            manual,
+            setManual,
+          }}
         >
           <Router>
             <Routes>

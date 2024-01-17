@@ -10,7 +10,7 @@ interface Warehouse {
 }
 
 const warehousesApi = axios.create({
-  baseURL: "http://balls.webhop.me:8000",
+  baseURL: "http://localhost:8000",
 });
 
 export const getWarehouses = async () => {
@@ -34,7 +34,7 @@ export const updateWarehouse = async (warehouse: Warehouse) => {
   );
 };
 
-export const deleteWarehouse = async ({ warehouse_id }: Warehouse) => {
+export const deleteWarehouse = async (warehouse_id: number) => {
   return await warehousesApi.delete(`/warehouses/${warehouse_id}`);
 };
 

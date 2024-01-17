@@ -2,10 +2,11 @@ import { useState } from "react";
 
 interface Props {
   items: string[];
-  onSelectItem: (item: string) => void;
+  onSelectItem: (item: number) => void;
+  onClickEdit: (index: number) => void;
 }
 
-function ListGroup({ items, onSelectItem }: Props) {
+function ListGroup({ items, onSelectItem, onClickEdit }: Props) {
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   return (
@@ -22,12 +23,15 @@ function ListGroup({ items, onSelectItem }: Props) {
             key={item}
             onClick={() => {
               setSelectedIndex(index);
-              onSelectItem(item);
+              onSelectItem(index);
             }}
           >
             <div className="d-flex justify-content-between">
               {item}
-              <button className="btn btn-secondary">
+              <button
+                className="btn btn-secondary"
+                onClick={() => onClickEdit(index)}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
