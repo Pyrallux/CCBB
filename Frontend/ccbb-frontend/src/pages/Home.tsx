@@ -20,7 +20,7 @@ function Home() {
   } else if (isError) {
     return <p>{error.message}</p>;
   } else {
-    let IS_CONFIGURED: boolean = warehouses?.length > 1 ? true : false;
+    let IS_CONFIGURED: boolean = warehouses?.length > 0 ? true : false;
 
     if (IS_CONFIGURED) {
       return <Navigate to="/SelectWarehouse" replace />;

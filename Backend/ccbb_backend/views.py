@@ -229,7 +229,13 @@ def cycle_detail(request, id, format=None):
     elif request.method == 'DELETE':
         cycle.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
+    
+@api_view(['GET'])
+def cycle_parent(request, parent_id, format=None):
+    if request.method =='GET':
+        cycle = Cycle.objects.filter(warehouse_id=parent_id)
+        serializer = CycleSerializer(cycle, many=True)
+        return Response(serializer.data)
 
 # Bin
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])

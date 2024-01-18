@@ -31,6 +31,7 @@ urlpatterns = [
     path('transactions/<int:id>', views.transaction_detail),   
     path('cycles/', views.cycle_list),
     path('cycles/<int:id>', views.cycle_detail),
+    path('cycles/parent/<int:parent_id>', views.cycle_parent),
     path('bins/', views.bin_list),
     path('bins/<int:id>', views.bin_detail),
     path('present_parts/', views.present_part_list),
