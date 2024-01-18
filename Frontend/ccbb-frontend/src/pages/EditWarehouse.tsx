@@ -1,7 +1,12 @@
-import WarehouseEdit from "../components/WarehouseEdit";
+import EditWarehouseForm from "../components/EditWarehouseForm";
 
 function EditWarehouse() {
-  return <WarehouseEdit />;
+  return (
+    <>
+      <h2>Edit Warehouse Info Below:</h2>
+      <EditWarehouseForm />
+    </>
+  );
 }
 
 export default EditWarehouse;

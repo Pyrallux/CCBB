@@ -11,7 +11,7 @@ function ListGroup({ items, onSelectItem, onClickEdit }: Props) {
 
   return (
     <>
-      {items.length === 0 && <p>No item found</p>}
+      {items.length === 0 && <p>No Items Found</p>}
       <ul className="list-group">
         {items.map((item, index) => (
           <li
