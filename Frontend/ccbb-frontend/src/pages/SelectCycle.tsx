@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../App";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -7,38 +7,34 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Table2Col from "../components/Table2Col";
 import ButtonGroup from "../components/ButtonGroup";
 import { getCycleParent } from "../api/cyclesApi";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface Data {
-  cycle: string;
+  cycle: number;
 }
 
 function SelectCycle() {
-  const { whse, cycle, setCycle } = useContext(AppContext);
+  const queryClient = useQueryClient();
+  const { whse, cycle, manual, setCycle } = useContext(AppContext);
   const navigate = useNavigate();
+  const [cycleNames, setCycleNames] = useState(["Loading..."]);
+  const [cycleDates, setCycleDates] = useState(["Loading..."]);
+  const [cycleKeys, setCycleKeys] = useState([0]);
 
   const {
     isLoading,
     isError,
     error,
+    refetch,
     data: cycles,
   } = useQuery({
     queryKey: ["getCycleParent"],
     queryFn: () => getCycleParent(whse),
   });
 
-  const cycle_names: string[] = [];
-  const cycle_dates: string[] = [];
-  const cycle_keys: number[] = [];
-  for (let i = 0; i < cycles?.length; i++) {
-    cycle_names.push(cycles[i].name);
-    cycle_dates.push(cycles[i].date);
-    cycle_keys.push(cycles[i].cycle_id);
-  }
-
   // Setup Yup Form Schema
   const schema = yup.object().shape({
-    cycle: yup.string().required("*Cycle Selection is Required"),
+    cycle: yup.number().required("*Cycle Selection is Required"),
   });
 
   // Setup React-Hook-Form Structure
@@ -58,14 +54,38 @@ function SelectCycle() {
     navigate("/CycleCount");
   };
 
-  const handleSelectItem = (element: string) => {
-    console.log(`Selected Element: ${element}`);
-    setValue("cycle", element);
+  const handleSelectItem = (index: number) => {
+    console.log(`Selected Element: ${index}`);
+    setValue("cycle", index);
   };
 
   const handleClick = (label: string) => {
     console.log(`Button: ${label} clicked`);
+    if (label == "Return") {
+      navigate("/SelectWarehouse");
+    }
+    if (label == "+ Add New Cycle") {
+      navigate("/AddCycle");
+    }
   };
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ["getCycleParent"] });
+    setTimeout(() => {
+      refetch;
+      const cycle_names: string[] = [];
+      const cycle_dates: string[] = [];
+      const cycle_keys: number[] = [];
+      for (let i = 0; i < cycles?.length; i++) {
+        cycle_names.push(cycles[i].name);
+        cycle_dates.push(cycles[i].date);
+        cycle_keys.push(cycles[i].cycle_id);
+      }
+      setCycleNames(cycle_names);
+      setCycleDates(cycle_dates);
+      setCycleKeys(cycle_keys);
+    }, 100);
+  }, [cycles]);
 
   // Shows loading/error screen until query is returned successfully
   if (isLoading) {
@@ -81,14 +101,24 @@ function SelectCycle() {
         {errors.cycle?.message}
       </text>
       <Table2Col
-        names={cycle_names}
-        dates={cycle_dates}
+        names={cycleNames}
+        dates={cycleDates}
         heading1="Cycle Count ID"
         heading2="Cycle Date"
         onSelectItem={handleSelectItem}
       />
       {cycles.length === 0 && <p>No Items Found</p>}
       <input type="hidden" defaultValue={cycle} {...register("cycle")} />
+      {manual === true && (
+        <div>
+          <ButtonGroup
+            label="+ Add New Cycle"
+            style="outline-primary"
+            onClick={handleClick}
+          />
+        </div>
+      )}
+      <ButtonGroup label="Return" onClick={handleClick} />
       <ButtonGroup label="Next" type="submit" onClick={handleClick} />
     </form>
   );

@@ -3,8 +3,8 @@ import axios from "axios";
 interface Cycle {
 	cycle_id?: number,
 	name: string,
-	date: string,
-	warehouse_id: number,
+	date: Date | string,
+	warehouse?: number,
 }
 
 const cyclesApi = axios.create({

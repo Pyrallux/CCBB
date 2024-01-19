@@ -6,20 +6,21 @@ import AddWarehouse from "./pages/AddWarehouse";
 import EditWarehouse from "./pages/EditWarehouse";
 import Home from "./pages/Home";
 import SelectCycle from "./pages/SelectCycle";
+import AddCycle from "./pages/AddCycle";
 import CycleCount from "./pages/CycleCount";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export const AppContext = createContext<{
   whse: number;
   setWhse: (newValue: number) => void;
-  cycle: string;
-  setCycle: (newValue: string) => void;
+  cycle: number;
+  setCycle: (newValue: number) => void;
   manual: boolean;
   setManual: (newValue: boolean) => void;
 }>({
   whse: 0,
   setWhse: () => undefined,
-  cycle: "",
+  cycle: 0,
   setCycle: () => undefined,
   manual: false,
   setManual: () => undefined,
@@ -29,7 +30,7 @@ function App() {
   const client = new QueryClient();
 
   const [whse, setWhse] = useState(0);
-  const [cycle, setCycle] = useState("");
+  const [cycle, setCycle] = useState(0);
   const [manual, setManual] = useState(false);
 
   return (
@@ -52,6 +53,7 @@ function App() {
               <Route path="/AddWarehouse" element={<AddWarehouse />} />
               <Route path="/EditWarehouse" element={<EditWarehouse />} />
               <Route path="/SelectCycle" element={<SelectCycle />} />
+              <Route path="/AddCycle" element={<AddCycle />} />
               <Route path="/CycleCount" element={<CycleCount />} />
               <Route path="*" element={<Home />} />
             </Routes>

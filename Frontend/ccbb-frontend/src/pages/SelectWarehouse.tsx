@@ -17,7 +17,7 @@ function SelectWarehouse() {
   const queryClient = useQueryClient();
   const [warehouseList, setWarehouseList] = useState(["Loading..."]);
   const [warehouseListKeys, setWarehouseListKeys] = useState([0]);
-  const { setWhse } = useContext(AppContext);
+  const { setWhse, setManual } = useContext(AppContext);
   const navigate = useNavigate();
 
   const {
@@ -49,6 +49,7 @@ function SelectWarehouse() {
   const onSubmit = (data: Data) => {
     console.log(data);
     setWhse(warehouseListKeys[data.warehouse]);
+    setManual(warehouses[data.warehouse].manual);
     // ** MISSING ** send submitted warehouse data to database and continue
     navigate("/SelectCycle");
   };

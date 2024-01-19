@@ -99,6 +99,9 @@ function EditWarehouseForm() {
       deleteWarehouseMutation.mutate(whse);
       navigate("/SelectWarehouse");
     }
+    if (label == "Return") {
+      navigate("/SelectWarehouse");
+    }
   };
 
   const handleChange = () => {
@@ -174,6 +177,7 @@ function EditWarehouseForm() {
         />
         <label className="form-check-label">Enable Manual Mode?</label>
       </div>
+      <ButtonGroup label="Return" onClick={handleClick} />
       <ButtonGroup label="Done" type="submit" onClick={handleClick} />
       <div>
         <ButtonGroup

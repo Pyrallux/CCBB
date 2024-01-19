@@ -5,7 +5,7 @@ interface Props {
   dates: string[];
   heading1: string;
   heading2: string;
-  onSelectItem: (label: string) => void;
+  onSelectItem: (index: number) => void;
 }
 
 function Table2Col({ names, dates, heading1, heading2, onSelectItem }: Props) {
@@ -26,7 +26,7 @@ function Table2Col({ names, dates, heading1, heading2, onSelectItem }: Props) {
             className={selectedIndex === index ? "table-active" : "table"}
             onClick={() => {
               setSelectedIndex(index);
-              onSelectItem(name);
+              onSelectItem(index);
             }}
           >
             <th scope="row">{index + 1}</th>
