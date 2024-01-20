@@ -60,6 +60,11 @@ function SelectCycle() {
     setValue("cycle", index);
   };
 
+  const handleClickEdit = (index: number) => {
+    setCycle(cycleKeys[index]);
+    navigate("/EditCycle");
+  };
+
   const handleClick = (label: string) => {
     console.log(`Button: ${label} clicked`);
     if (label == "Return") {
@@ -110,6 +115,7 @@ function SelectCycle() {
         heading1="Cycle Count ID"
         heading2="Cycle Date"
         onSelectItem={handleSelectItem}
+        onClickEdit={handleClickEdit}
       />
       {cycles.length === 0 && <p>No Items Found</p>}
       <input type="hidden" defaultValue={cycle} {...register("cycle")} />
