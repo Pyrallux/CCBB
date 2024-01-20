@@ -30,6 +30,7 @@ function SelectCycle() {
   } = useQuery({
     queryKey: ["getCycleParent"],
     queryFn: () => getCycleParent(whse),
+    refetchInterval: 2500,
   });
 
   // Setup Yup Form Schema

@@ -29,6 +29,7 @@ function SelectWarehouse() {
   } = useQuery({
     queryKey: ["getWarehouseList"],
     queryFn: () => getWarehouses(),
+    refetchInterval: 2500,
   });
 
   // Setup Yup Form Schema
