@@ -68,6 +68,9 @@ function SelectCycle() {
     if (label == "+ Add New Cycle") {
       navigate("/AddCycle");
     }
+    if (label == "View Transactions") {
+      navigate("/Transactions");
+    }
   };
 
   useEffect(() => {
@@ -119,6 +122,13 @@ function SelectCycle() {
           />
         </div>
       )}
+      <div>
+        <ButtonGroup
+          label="View Transactions"
+          style="outline-dark"
+          onClick={handleClick}
+        />
+      </div>
       <ButtonGroup label="Return" onClick={handleClick} />
       <ButtonGroup label="Next" type="submit" onClick={handleClick} />
     </form>
