@@ -7,6 +7,7 @@ import EditWarehouse from "./pages/EditWarehouse";
 import Home from "./pages/Home";
 import SelectCycle from "./pages/SelectCycle";
 import AddCycle from "./pages/AddCycle";
+import EditCycle from "./pages/EditCycle";
 import Transactions from "./pages/Transactions";
 import CycleCount from "./pages/CycleCount";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -55,6 +56,7 @@ function App() {
               <Route path="/EditWarehouse" element={<EditWarehouse />} />
               <Route path="/SelectCycle" element={<SelectCycle />} />
               <Route path="/AddCycle" element={<AddCycle />} />
+              <Route path="/EditCycle" element={<EditCycle />} />
               <Route path="/Transactions" element={<Transactions />} />
               <Route path="/CycleCount" element={<CycleCount />} />
               <Route path="*" element={<Home />} />

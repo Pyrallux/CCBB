@@ -1,14 +1,15 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AppContext } from "../App";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ButtonGroup from "./ButtonGroup";
-import { useMutation } from "@tanstack/react-query";
-import { addCycle } from "../api/cyclesApi";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getCycleDetail, updateCycle, deleteCycle } from "../api/cyclesApi";
 import { format } from "date-fns";
 
+// Specifies the structure of warehouse data model (accessed through api)
 interface CycleData {
   cycle_id?: number;
   name: string;
@@ -16,19 +17,36 @@ interface CycleData {
   warehouse_id?: number;
 }
 
-// Main Function of Component
-function AddCycleForm() {
-  const { whse, cycle } = useContext(AppContext);
+// Main Funciton of Component
+function EditWarehouseForm() {
+  const { cycle, whse } = useContext(AppContext);
 
-  // Defines mutation functions of warehouse api
-  const addCycleMutation = useMutation({
-    mutationFn: addCycle,
+  // Defines react-query client and gathers data from warehouse api
+  const queryClient = useQueryClient();
+
+  const {
+    isLoading,
+    isError,
+    error,
+    data: cycleData,
+  } = useQuery({
+    queryKey: ["editCycle"],
+    queryFn: () => getCycleDetail(cycle), // ** REMINDER ** This should query the warehouse selected
+  });
+
+  const updateCycleMutation = useMutation({
+    mutationFn: updateCycle,
     onSuccess: () => {
-      console.log("Cycle successfully added");
+      queryClient.invalidateQueries({ queryKey: ["editCycle"] });
+    },
+  });
+  const deleteCycleMutation = useMutation({
+    mutationFn: deleteCycle,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["editCycle"] });
     },
   });
 
-  // Initializes context, navigate, and effect hooks needed later in script
   const navigate = useNavigate();
 
   // Setup yup form structure and initialize form hook
@@ -42,8 +60,10 @@ function AddCycleForm() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
+    mode: "onSubmit",
     resolver: yupResolver(schema),
   });
 
@@ -51,16 +71,34 @@ function AddCycleForm() {
   const onSubmit = (data: CycleData) => {
     data.cycle_id = cycle;
     data.warehouse_id = whse;
-    console.log(data.date);
     data.date = format(data.date, "yyyy-MM-dd");
-    addCycleMutation.mutate(data);
+    updateCycleMutation.mutate(data);
     console.log(data);
     navigate("/SelectCycle");
   };
 
   const handleClick = (label: string) => {
-    label == "Return" && navigate("/SelectCycle");
+    if (label == "Delete Cycle") {
+      deleteCycleMutation.mutate(cycle);
+      navigate("/SelectCycle");
+    }
+    if (label == "Return") {
+      navigate("/SelectCycle");
+    }
   };
+
+  useEffect(() => {
+    console.log(cycleData);
+    setValue("name", cycleData?.name);
+    setValue("date", cycleData?.date);
+  }, [cycleData]);
+
+  // Shows loading/error screen until query is returned successfully
+  if (isLoading) {
+    return <p>Fetching Data From Database...</p>;
+  } else if (isError) {
+    return <p>{error.message}</p>;
+  }
 
   // Main Page
   return (
@@ -79,8 +117,15 @@ function AddCycleForm() {
         <ButtonGroup label="Return" onClick={handleClick} />
         <ButtonGroup label="Done" type="submit" onClick={handleClick} />
       </form>
+      <div>
+        <ButtonGroup
+          label="Delete Cycle"
+          style="outline-danger"
+          onClick={handleClick}
+        />
+      </div>
     </>
   );
 }
 
-export default AddCycleForm;
+export default EditWarehouseForm;

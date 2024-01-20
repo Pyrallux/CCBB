@@ -4,7 +4,7 @@ interface Cycle {
 	cycle_id?: number,
 	name: string,
 	date: Date | string,
-	warehouse?: number,
+	warehouse_id?: number,
 }
 
 const cyclesApi = axios.create({
