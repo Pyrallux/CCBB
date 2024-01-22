@@ -1,12 +1,12 @@
 import { useContext } from "react";
-import { AppContext } from "../App";
+import { AppContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import ButtonGroup from "./ButtonGroup";
+import ButtonGroup from "../ButtonGroup";
 import { useMutation } from "@tanstack/react-query";
-import { addWarehouse } from "../api/warehousesApi";
+import { addWarehouse } from "../../api/warehousesApi";
 
 // Specifies the parameters of the component
 interface Props {

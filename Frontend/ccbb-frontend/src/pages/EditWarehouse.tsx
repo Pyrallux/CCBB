@@ -1,4 +1,4 @@
-import EditWarehouseForm from "../components/EditWarehouseForm";
+import EditWarehouseForm from "../components/Forms/EditWarehouseForm";
 
 function EditWarehouse() {
   return (

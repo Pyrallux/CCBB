@@ -1,12 +1,13 @@
 import { useContext, useEffect } from "react";
-import { AppContext } from "../App";
+import { AppContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import ButtonGroup from "./ButtonGroup";
+import ButtonGroup from "../ButtonGroup";
+import BinListGroup from "../BinListGroup";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getCycleDetail, updateCycle, deleteCycle } from "../api/cyclesApi";
+import { getCycleDetail, updateCycle, deleteCycle } from "../../api/cyclesApi";
 import { format } from "date-fns";
 
 // Specifies the structure of warehouse data model (accessed through api)
@@ -52,10 +53,7 @@ function EditWarehouseForm() {
   // Setup yup form structure and initialize form hook
   const schema = yup.object().shape({
     name: yup.string().required("*Cycle Name is Required"),
-    date: yup
-      .date()
-      .min(new Date(), "*Date Must be in the future")
-      .required("*Cycle Date is Required"),
+    date: yup.date().required("*Cycle Date is Required"),
   });
   const {
     register,
@@ -69,10 +67,12 @@ function EditWarehouseForm() {
 
   // Various event handlers
   const onSubmit = (data: CycleData) => {
-    data.cycle_id = cycle;
-    data.warehouse_id = whse;
-    data.date = format(data.date, "yyyy-MM-dd");
-    updateCycleMutation.mutate(data);
+    updateCycleMutation.mutate({
+      cycle_id: cycle,
+      name: data.name,
+      date: format(data.date, "yyyy-MM-dd"),
+      warehouse_id: whse,
+    });
     console.log(data);
     navigate("/SelectCycle");
   };
@@ -114,6 +114,8 @@ function EditWarehouseForm() {
           {errors.date?.message}
         </text>
         <input type="date" className="form-control" {...register("date")} />
+        <label className="form-label">Bins to Count</label>
+        <BinListGroup />
         <ButtonGroup label="Return" onClick={handleClick} />
         <ButtonGroup label="Done" type="submit" onClick={handleClick} />
       </form>

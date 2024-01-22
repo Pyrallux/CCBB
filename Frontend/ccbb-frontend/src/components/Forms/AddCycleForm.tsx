@@ -1,12 +1,13 @@
 import { useContext } from "react";
-import { AppContext } from "../App";
+import { AppContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import ButtonGroup from "./ButtonGroup";
+import ButtonGroup from "../ButtonGroup";
+import BinListGroup from "../BinListGroup";
 import { useMutation } from "@tanstack/react-query";
-import { addCycle } from "../api/cyclesApi";
+import { addCycle } from "../../api/cyclesApi";
 import { format } from "date-fns";
 
 interface CycleData {
@@ -18,9 +19,9 @@ interface CycleData {
 
 // Main Function of Component
 function AddCycleForm() {
-  const { whse, cycle } = useContext(AppContext);
+  const { whse, cycle, setBinAdded } = useContext(AppContext);
 
-  // Defines mutation functions of warehouse api
+  // Defines mutation functions of cycle api
   const addCycleMutation = useMutation({
     mutationFn: addCycle,
     onSuccess: () => {
@@ -49,12 +50,13 @@ function AddCycleForm() {
 
   // Various event handlers
   const onSubmit = (data: CycleData) => {
-    data.cycle_id = cycle;
-    data.warehouse_id = whse;
-    console.log(data.date);
-    data.date = format(data.date, "yyyy-MM-dd");
-    addCycleMutation.mutate(data);
-    console.log(data);
+    addCycleMutation.mutate({
+      cycle_id: cycle,
+      name: data.name,
+      date: format(data.date, "yyyy-MM-dd"),
+      warehouse_id: whse,
+    });
+    setBinAdded(true);
     navigate("/SelectCycle");
   };
 
@@ -76,6 +78,8 @@ function AddCycleForm() {
           {errors.date?.message}
         </text>
         <input type="date" className="form-control" {...register("date")} />
+        <label className="form-label">Bins to Count</label>
+        <BinListGroup />
         <ButtonGroup label="Return" onClick={handleClick} />
         <ButtonGroup label="Done" type="submit" onClick={handleClick} />
       </form>

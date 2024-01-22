@@ -1,4 +1,4 @@
-import WarehouseSetupForm from "../components/WarehouseSetupForm";
+import WarehouseSetupForm from "../components/Forms/WarehouseSetupForm";
 
 function AddWarehouse() {
   return (

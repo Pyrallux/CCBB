@@ -17,6 +17,10 @@ export const AppContext = createContext<{
   setWhse: (newValue: number) => void;
   cycle: number;
   setCycle: (newValue: number) => void;
+  binList: string[];
+  setBinList: (newValue: string[]) => void;
+  binAdded: boolean;
+  setBinAdded: (newValue: boolean) => void;
   manual: boolean;
   setManual: (newValue: boolean) => void;
 }>({
@@ -24,6 +28,10 @@ export const AppContext = createContext<{
   setWhse: () => undefined,
   cycle: 0,
   setCycle: () => undefined,
+  binList: [""],
+  setBinList: () => undefined,
+  binAdded: false,
+  setBinAdded: () => undefined,
   manual: false,
   setManual: () => undefined,
 });
@@ -33,6 +41,8 @@ function App() {
 
   const [whse, setWhse] = useState(0);
   const [cycle, setCycle] = useState(0);
+  const [binList, setBinList] = useState([""]);
+  const [binAdded, setBinAdded] = useState(false);
   const [manual, setManual] = useState(false);
 
   return (
@@ -44,6 +54,10 @@ function App() {
             setWhse,
             cycle,
             setCycle,
+            binList,
+            setBinList,
+            binAdded,
+            setBinAdded,
             manual,
             setManual,
           }}

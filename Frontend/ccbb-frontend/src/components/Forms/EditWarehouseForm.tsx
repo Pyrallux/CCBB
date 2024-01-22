@@ -1,16 +1,16 @@
 import { useContext, useEffect } from "react";
-import { AppContext } from "../App";
+import { AppContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import ButtonGroup from "./ButtonGroup";
+import ButtonGroup from "../ButtonGroup";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getWarehouseDetail,
   updateWarehouse,
   deleteWarehouse,
-} from "../api/warehousesApi";
+} from "../../api/warehousesApi";
 
 // Specifies the structure of warehouse data model (accessed through api)
 interface WarehouseData {

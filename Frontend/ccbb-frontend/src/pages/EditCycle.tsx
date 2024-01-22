@@ -1,4 +1,4 @@
-import EditCycleForm from "../components/EditCycleForm";
+import EditCycleForm from "../components/Forms/EditCycleForm";
 
 function EditCycle() {
   return (

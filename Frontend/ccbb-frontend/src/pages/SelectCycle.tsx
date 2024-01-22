@@ -7,7 +7,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Table2Col from "../components/Table2Col";
 import ButtonGroup from "../components/ButtonGroup";
 import { getCycleParent } from "../api/cyclesApi";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { addBin } from "../api/binsApi";
 
 interface Data {
   cycle: number;
@@ -15,7 +16,8 @@ interface Data {
 
 function SelectCycle() {
   const queryClient = useQueryClient();
-  const { whse, cycle, manual, setCycle } = useContext(AppContext);
+  const { whse, cycle, manual, setCycle, binList, binAdded, setBinAdded } =
+    useContext(AppContext);
   const navigate = useNavigate();
   const [cycleNames, setCycleNames] = useState(["Loading..."]);
   const [cycleDates, setCycleDates] = useState(["Loading..."]);
@@ -31,6 +33,14 @@ function SelectCycle() {
     queryKey: ["getCycleParent"],
     queryFn: () => getCycleParent(whse),
     refetchInterval: 2500,
+  });
+
+  // Defines mutation functions of bin api
+  const addBinMutation = useMutation({
+    mutationFn: addBin,
+    onSuccess: () => {
+      console.log("Bin successsfully added");
+    },
   });
 
   // Setup Yup Form Schema
@@ -96,49 +106,65 @@ function SelectCycle() {
     }, 100);
   }, [cycles]);
 
+  useEffect(() => {
+    if (binAdded == true && cycleKeys.length > 1) {
+      console.log("Trying to add bin");
+      console.log(binAdded);
+      console.log(cycleKeys);
+      console.log(binList);
+      console.log(cycleKeys[cycleKeys.length - 1]);
+      binList.map((bin) =>
+        addBinMutation.mutate({
+          name: bin,
+          cycle_id: cycleKeys[cycleKeys.length - 1],
+        })
+      );
+      setBinAdded(false);
+    }
+  }, [binAdded, cycleKeys]);
+
   // Shows loading/error screen until query is returned successfully
   if (isLoading) {
     return <p>Fetching Data From Database...</p>;
   } else if (isError) {
     return <p>{error.message}</p>;
-  }
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <h2 className="md-4">Select Cycle Count Below:</h2>
-      <text className="ms-3 text-danger fst-italic">
-        {errors.cycle?.message}
-      </text>
-      <Table2Col
-        names={cycleNames}
-        dates={cycleDates}
-        heading1="Cycle Count ID"
-        heading2="Cycle Date"
-        onSelectItem={handleSelectItem}
-        onClickEdit={handleClickEdit}
-      />
-      {cycles.length === 0 && <p>No Items Found</p>}
-      <input type="hidden" defaultValue={cycle} {...register("cycle")} />
-      {manual === true && (
+  } else
+    return (
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h2 className="md-4">Select Cycle Count Below:</h2>
+        <text className="ms-3 text-danger fst-italic">
+          {errors.cycle?.message}
+        </text>
+        <Table2Col
+          names={cycleNames}
+          dates={cycleDates}
+          heading1="Cycle Count ID"
+          heading2="Cycle Date"
+          onSelectItem={handleSelectItem}
+          onClickEdit={handleClickEdit}
+        />
+        {cycles.length === 0 && <p>No Items Found</p>}
+        <input type="hidden" defaultValue={cycle} {...register("cycle")} />
+        {manual === true && (
+          <div>
+            <ButtonGroup
+              label="+ Add New Cycle"
+              style="outline-primary"
+              onClick={handleClick}
+            />
+          </div>
+        )}
         <div>
           <ButtonGroup
-            label="+ Add New Cycle"
-            style="outline-primary"
+            label="View Transactions"
+            style="outline-dark"
             onClick={handleClick}
           />
         </div>
-      )}
-      <div>
-        <ButtonGroup
-          label="View Transactions"
-          style="outline-dark"
-          onClick={handleClick}
-        />
-      </div>
-      <ButtonGroup label="Return" onClick={handleClick} />
-      <ButtonGroup label="Next" type="submit" onClick={handleClick} />
-    </form>
-  );
+        <ButtonGroup label="Return" onClick={handleClick} />
+        <ButtonGroup label="Next" type="submit" onClick={handleClick} />
+      </form>
+    );
 }
 
 export default SelectCycle;

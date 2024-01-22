@@ -5,9 +5,10 @@ interface Props {
     | "primary"
     | "secondary"
     | "outline-primary"
+    | "outline-secondary"
     | "outline-danger"
     | "outline-dark";
-  disabled?: boolean;
+  margin?: boolean;
   onClick: (label: string) => void;
 }
 
@@ -15,10 +16,10 @@ function ButtonGroup({
   label,
   type = "button",
   style = "primary",
-  disabled = false,
+  margin = true,
   onClick,
 }: Props) {
-  if (!disabled) {
+  if (margin) {
     return (
       <button
         className={`mt-3 me-3 btn btn-${style}`}
@@ -31,10 +32,9 @@ function ButtonGroup({
   } else {
     return (
       <button
-        className={`mt-3 me-3 btn btn-${style}`}
+        className={`btn btn-${style}`}
         type={type}
         onClick={() => onClick(label)}
-        disabled
       >
         {label}
       </button>
