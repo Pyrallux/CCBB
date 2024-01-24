@@ -26,6 +26,8 @@ function AddCycleForm() {
     mutationFn: addCycle,
     onSuccess: () => {
       console.log("Cycle successfully added");
+      setBinAdded(true);
+      navigate("/SelectCycle");
     },
   });
 
@@ -56,8 +58,6 @@ function AddCycleForm() {
       date: format(data.date, "yyyy-MM-dd"),
       warehouse_id: whse,
     });
-    setBinAdded(true);
-    navigate("/SelectCycle");
   };
 
   const handleClick = (label: string) => {

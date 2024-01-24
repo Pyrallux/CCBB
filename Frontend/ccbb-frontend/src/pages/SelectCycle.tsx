@@ -16,8 +16,16 @@ interface Data {
 
 function SelectCycle() {
   const queryClient = useQueryClient();
-  const { whse, cycle, manual, setCycle, binList, binAdded, setBinAdded } =
-    useContext(AppContext);
+  const {
+    whse,
+    cycle,
+    manual,
+    setCycle,
+    binList,
+    setBinList,
+    binAdded,
+    setBinAdded,
+  } = useContext(AppContext);
   const navigate = useNavigate();
   const [cycleNames, setCycleNames] = useState(["Loading..."]);
   const [cycleDates, setCycleDates] = useState(["Loading..."]);
@@ -120,6 +128,7 @@ function SelectCycle() {
         })
       );
       setBinAdded(false);
+      setBinList([""]);
     }
   }, [binAdded, cycleKeys]);
 
@@ -128,43 +137,43 @@ function SelectCycle() {
     return <p>Fetching Data From Database...</p>;
   } else if (isError) {
     return <p>{error.message}</p>;
-  } else
-    return (
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <h2 className="md-4">Select Cycle Count Below:</h2>
-        <text className="ms-3 text-danger fst-italic">
-          {errors.cycle?.message}
-        </text>
-        <Table2Col
-          names={cycleNames}
-          dates={cycleDates}
-          heading1="Cycle Count ID"
-          heading2="Cycle Date"
-          onSelectItem={handleSelectItem}
-          onClickEdit={handleClickEdit}
-        />
-        {cycles.length === 0 && <p>No Items Found</p>}
-        <input type="hidden" defaultValue={cycle} {...register("cycle")} />
-        {manual === true && (
-          <div>
-            <ButtonGroup
-              label="+ Add New Cycle"
-              style="outline-primary"
-              onClick={handleClick}
-            />
-          </div>
-        )}
+  }
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <h2 className="md-4">Select Cycle Count Below:</h2>
+      <text className="ms-3 text-danger fst-italic">
+        {errors.cycle?.message}
+      </text>
+      <Table2Col
+        names={cycleNames}
+        dates={cycleDates}
+        heading1="Cycle Count ID"
+        heading2="Cycle Date"
+        onSelectItem={handleSelectItem}
+        onClickEdit={handleClickEdit}
+      />
+      {cycles.length === 0 && <p>No Items Found</p>}
+      <input type="hidden" defaultValue={cycle} {...register("cycle")} />
+      {manual === true && (
         <div>
           <ButtonGroup
-            label="View Transactions"
-            style="outline-dark"
+            label="+ Add New Cycle"
+            style="outline-primary"
             onClick={handleClick}
           />
         </div>
-        <ButtonGroup label="Return" onClick={handleClick} />
-        <ButtonGroup label="Next" type="submit" onClick={handleClick} />
-      </form>
-    );
+      )}
+      <div>
+        <ButtonGroup
+          label="View Transactions"
+          style="outline-dark"
+          onClick={handleClick}
+        />
+      </div>
+      <ButtonGroup label="Return" onClick={handleClick} />
+      <ButtonGroup label="Next" type="submit" onClick={handleClick} />
+    </form>
+  );
 }
 
 export default SelectCycle;

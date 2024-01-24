@@ -301,6 +301,14 @@ def bin_detail(request, id, format=None):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@api_view(["GET"])
+def bin_parent(request, parent_id, format=None):
+    if request.method == "GET":
+        bin = Bin.objects.filter(cycle_id=parent_id)
+        serializer = BinSerializer(bin, many=True)
+        return Response(serializer.data)
+
+
 # PresentPart
 @api_view(["GET", "POST", "PUT", "DELETE"])
 def present_part_list(request, format=None):

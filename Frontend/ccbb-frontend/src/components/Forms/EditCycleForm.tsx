@@ -8,6 +8,7 @@ import ButtonGroup from "../ButtonGroup";
 import BinListGroup from "../BinListGroup";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getCycleDetail, updateCycle, deleteCycle } from "../../api/cyclesApi";
+import { getBinParent, deleteBin, addBin } from "../../api/binsApi";
 import { format } from "date-fns";
 
 // Specifies the structure of warehouse data model (accessed through api)
@@ -20,7 +21,7 @@ interface CycleData {
 
 // Main Funciton of Component
 function EditWarehouseForm() {
-  const { cycle, whse } = useContext(AppContext);
+  const { cycle, whse, binList, setBinList } = useContext(AppContext);
 
   // Defines react-query client and gathers data from warehouse api
   const queryClient = useQueryClient();
@@ -35,17 +36,50 @@ function EditWarehouseForm() {
     queryFn: () => getCycleDetail(cycle), // ** REMINDER ** This should query the warehouse selected
   });
 
-  const updateCycleMutation = useMutation({
-    mutationFn: updateCycle,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["editCycle"] });
-    },
-  });
   const deleteCycleMutation = useMutation({
     mutationFn: deleteCycle,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["editCycle"] });
     },
+  });
+
+  const addBinMutation = useMutation({
+    mutationFn: addBin,
+    onSuccess: () => {
+      console.log("Bin Added");
+    },
+  });
+
+  const updateCycleMutation = useMutation({
+    mutationFn: updateCycle,
+    onSuccess: () => {
+      console.log(binList);
+      for (let i = 0; i < binData?.length; i++) {
+        deleteBinMutation.mutate(binData[i].bin_id);
+      }
+      binList.map((bin) =>
+        addBinMutation.mutate({
+          name: bin,
+          cycle_id: cycle,
+        })
+      );
+      // queryClient.invalidateQueries({ queryKey: ["editCycle"] });
+      navigate("/SelectCycle");
+    },
+  });
+
+  const deleteBinMutation = useMutation({
+    mutationFn: deleteBin,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["editCycleBins"] });
+    },
+  });
+
+  const cycleId = cycleData?.cycle_id;
+  const { data: binData } = useQuery({
+    queryKey: ["editCycleBins"],
+    queryFn: () => getBinParent(cycleId),
+    enabled: !!cycleId,
   });
 
   const navigate = useNavigate();
@@ -73,8 +107,6 @@ function EditWarehouseForm() {
       date: format(data.date, "yyyy-MM-dd"),
       warehouse_id: whse,
     });
-    console.log(data);
-    navigate("/SelectCycle");
   };
 
   const handleClick = (label: string) => {
@@ -92,6 +124,14 @@ function EditWarehouseForm() {
     setValue("name", cycleData?.name);
     setValue("date", cycleData?.date);
   }, [cycleData]);
+
+  useEffect(() => {
+    let bin_names: string[] = [];
+    for (let i = 0; i < binData?.length; i++) {
+      bin_names.push(binData[i].name);
+    }
+    setBinList(bin_names);
+  }, [binData]);
 
   // Shows loading/error screen until query is returned successfully
   if (isLoading) {
