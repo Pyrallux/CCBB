@@ -1,6 +1,6 @@
 {
   "name": "ccbb-frontend",
-  "private": true,
+  "private": false,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -33,5 +33,10 @@
     "sass": "^1.70.0",
     "typescript": "^5.2.2",
     "vite": "^5.0.12"
-  }
+  },
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
