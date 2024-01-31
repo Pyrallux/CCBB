@@ -20,7 +20,11 @@ services:
       - 5173:5173
     develop:
       watch:
-        - path: ./Frontend/ccbb-frontend
+        - action: sync
+          path: ./Frontend/ccbb-frontend/
+          target: /app
+        - action: rebuild
+          path: ./Frontend/ccbb-frontend/package.json
 
   ccbb-backend:
     build:
@@ -29,7 +33,13 @@ services:
       - 8000:8000
     develop:
       watch:
-        - path: ./Backend
+        - action: sync
+          path: ./Backend/ccbb_backend
+          target: /app/ccbb_backend
+        - action: rebuild
+          path: ./Backend/requirements.txt
+        - action: rebuild
+          path: ./Backend/ccbb_backend/models.py
 
 #volumes:
   #database:
