@@ -24,9 +24,9 @@ export const AppContext = createContext<{
   manual: boolean;
   setManual: (newValue: boolean) => void;
 }>({
-  whse: 0,
+  whse: -1,
   setWhse: () => undefined,
-  cycle: 0,
+  cycle: -1,
   setCycle: () => undefined,
   binList: [""],
   setBinList: () => undefined,
@@ -39,8 +39,8 @@ export const AppContext = createContext<{
 function App() {
   const client = new QueryClient();
 
-  const [whse, setWhse] = useState(0);
-  const [cycle, setCycle] = useState(0);
+  const [whse, setWhse] = useState(-1);
+  const [cycle, setCycle] = useState(-1);
   const [binList, setBinList] = useState([""]);
   const [binAdded, setBinAdded] = useState(false);
   const [manual, setManual] = useState(false);

@@ -101,9 +101,7 @@ function SelectWarehouse() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h2>Select A Warehouse:</h2>
-      <text className="ms-3 text-danger fst-italic">
-        {errors.warehouse?.message}
-      </text>
+      <p className="ms-3 text-danger fst-italic">{errors.warehouse?.message}</p>
       <ListGroup
         items={warehouseList}
         onSelectItem={handleSelectItem}

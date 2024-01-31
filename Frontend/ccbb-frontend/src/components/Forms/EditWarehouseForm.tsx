@@ -132,23 +132,19 @@ function EditWarehouseForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <label className="form-label">Warehouse Nickname</label>
-      <text className="ms-3 text-danger fst-italic">
-        {errors.name?.message}
-      </text>
+      <p className="ms-3 text-danger fst-italic">{errors.name?.message}</p>
       <input type="text" className="form-control" {...register("name")} />
       {manual == false && (
         <>
           <label className="form-label mt-3">Warehouse Database Path</label>
-          <text className="ms-3 text-danger fst-italic">
-            {errors.path?.message}
-          </text>
+          <p className="ms-3 text-danger fst-italic">{errors.path?.message}</p>
           <input type="text" className="form-control" {...register("path")} />
           <label className="form-labe mt-3">
             Warehouse ABC Code Database Path
           </label>
-          <text className="ms-3 text-danger fst-italic">
+          <p className="ms-3 text-danger fst-italic">
             {errors.abc_code_path?.message}
-          </text>
+          </p>
           <input
             type="text"
             className="form-control"
@@ -157,9 +153,9 @@ function EditWarehouseForm() {
           <label className="form-label mt-3">
             Number of Cycles/Year to Generate
           </label>
-          <text className="ms-3 text-danger fst-italic">
+          <p className="ms-3 text-danger fst-italic">
             {errors.cycles_per_year?.message}
-          </text>
+          </p>
           <input
             type="text"
             className="form-control"

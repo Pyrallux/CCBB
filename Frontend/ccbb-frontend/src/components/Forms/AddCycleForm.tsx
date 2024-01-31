@@ -69,14 +69,10 @@ function AddCycleForm() {
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label className="form-label">Cycle Name</label>
-        <text className="ms-3 text-danger fst-italic">
-          {errors.name?.message}
-        </text>
+        <p className="ms-3 text-danger fst-italic">{errors.name?.message}</p>
         <input type="text" className="form-control" {...register("name")} />
         <label className="form-label">Cycle Date</label>
-        <text className="ms-3 text-danger fst-italic">
-          {errors.date?.message}
-        </text>
+        <p className="ms-3 text-danger fst-italic">{errors.date?.message}</p>
         <input type="date" className="form-control" {...register("date")} />
         <label className="form-label">Bins to Count</label>
         <BinListGroup />

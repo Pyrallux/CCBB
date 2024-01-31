@@ -53,7 +53,10 @@ function SelectCycle() {
 
   // Setup Yup Form Schema
   const schema = yup.object().shape({
-    cycle: yup.number().required("*Cycle Selection is Required"),
+    cycle: yup
+      .number()
+      .positive("*Cycle Selection is Required")
+      .required("*Cycle Selection is Required"),
   });
 
   // Setup React-Hook-Form Structure
@@ -141,9 +144,7 @@ function SelectCycle() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h2 className="md-4">Select Cycle Count Below:</h2>
-      <text className="ms-3 text-danger fst-italic">
-        {errors.cycle?.message}
-      </text>
+      <p className="ms-3 text-danger fst-italic">{errors.cycle?.message}</p>
       <Table2Col
         names={cycleNames}
         dates={cycleDates}
