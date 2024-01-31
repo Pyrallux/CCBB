@@ -1,0 +1,35 @@
+# Comments are provided throughout this file to help you get started.
+# If you need more help, visit the Docker compose reference guide at
+# https://docs.docker.com/compose/compose-file/
+
+# Here the instructions define your application as two services called "todo-app" and “todo-database”
+# The service “todo-app” is built from the Dockerfile in the /app directory,
+# and the service “todo-database” uses the official MongoDB image 
+# from Docker Hub - https://hub.docker.com/_/mongo. 
+# You can add other services your application may depend on here.
+
+services:
+  ccbb-frontend:
+    build:
+      context: ./Frontend/ccbb-frontend
+    depends_on:
+      - ccbb-backend
+    environment:
+      NODE_ENV: production
+    ports:
+      - 5173:5173
+    develop:
+      watch:
+        - path: ./Frontend/ccbb-frontend
+
+  ccbb-backend:
+    build:
+      context: ./Backend
+    ports:
+      - 8000:8000
+    develop:
+      watch:
+        - path: ./Backend
+
+#volumes:
+  #database:

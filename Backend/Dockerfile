@@ -14,6 +14,8 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # the application crashes without emitting any logs due to buffering.
 ENV PYTHONUNBUFFERED=1
 
+RUN mkdir /app && chown www-data:www-data /app
+
 WORKDIR /app
 
 # Create a non-privileged user that the app will run under.
@@ -36,11 +38,11 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=requirements.txt,target=requirements.txt \
     python -m pip install -r requirements.txt
 
-# Switch to the non-privileged user to run the application.
-USER appuser
+USER www-data
 
 # Copy the source code into the container.
-COPY . .
+COPY --chown=www-data:www-data ./db.sqlite3 ./
+COPY --chown=www-data:www-data . .
 
 # Expose the port that the application listens on.
 EXPOSE 8000
