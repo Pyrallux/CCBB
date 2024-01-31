@@ -43,13 +43,6 @@ function EditWarehouseForm() {
     },
   });
 
-  const addBinMutation = useMutation({
-    mutationFn: addBin,
-    onSuccess: () => {
-      console.log("Bin Added");
-    },
-  });
-
   const updateCycleMutation = useMutation({
     mutationFn: updateCycle,
     onSuccess: () => {
@@ -65,6 +58,13 @@ function EditWarehouseForm() {
       );
       // queryClient.invalidateQueries({ queryKey: ["editCycle"] });
       navigate("/SelectCycle");
+    },
+  });
+
+  const addBinMutation = useMutation({
+    mutationFn: addBin,
+    onSuccess: () => {
+      console.log("Bin Added");
     },
   });
 
