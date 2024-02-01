@@ -13,7 +13,6 @@ interface Part {
 
 function PartListGroup({ type }: Props) {
   const { presentPartList, setPresentPartList } = useContext(AppContext);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
 
   let part_list: Part[];
 
@@ -94,18 +93,12 @@ function PartListGroup({ type }: Props) {
         )}
 
         <tbody>
-          {presentPartList.map((part_number, index) => (
-            <tr
-              className={
-                selectedIndex === index
-                  ? "table-active"
-                  : "table-active table-light bg-white"
-              }
-            >
+          {presentPartList.map((part, index) => (
+            <tr className={"table-active table-light bg-white"}>
               <th scope="row">{index + 1}</th>
               <td>
                 <input
-                  defaultValue={presentPartList[index].part_number}
+                  defaultValue={part.part_number}
                   type="text"
                   className="form-control me-3"
                   onBlur={(e) => handleEditPartNumber(e.target.value, index)}
@@ -114,7 +107,7 @@ function PartListGroup({ type }: Props) {
               <td>
                 <div className="d-flex justify-content-between">
                   <input
-                    defaultValue={presentPartList[index].qty}
+                    defaultValue={part.qty}
                     type="number"
                     className="form-control me-3"
                     onBlur={(e) =>
