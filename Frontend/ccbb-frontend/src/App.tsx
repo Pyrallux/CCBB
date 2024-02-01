@@ -12,6 +12,11 @@ import Transactions from "./pages/Transactions";
 import CycleCount from "./pages/CycleCount";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+interface Part {
+  part_number: string;
+  qty: number;
+}
+
 export const AppContext = createContext<{
   whse: number;
   setWhse: (newValue: number) => void;
@@ -23,6 +28,10 @@ export const AppContext = createContext<{
   setBinAdded: (newValue: boolean) => void;
   manual: boolean;
   setManual: (newValue: boolean) => void;
+  presentPartList: Part[];
+  setPresentPartList: (newValue: Part[]) => void;
+  systemPartList: Part[];
+  setSystemPartList: (newValue: Part[]) => void;
 }>({
   whse: -1,
   setWhse: () => undefined,
@@ -34,6 +43,10 @@ export const AppContext = createContext<{
   setBinAdded: () => undefined,
   manual: false,
   setManual: () => undefined,
+  presentPartList: [{ part_number: "-1", qty: -1 }],
+  setPresentPartList: () => undefined,
+  systemPartList: [{ part_number: "-1", qty: -1 }],
+  setSystemPartList: () => undefined,
 });
 
 function App() {
@@ -44,6 +57,12 @@ function App() {
   const [binList, setBinList] = useState([""]);
   const [binAdded, setBinAdded] = useState(false);
   const [manual, setManual] = useState(false);
+  const [presentPartList, setPresentPartList] = useState([
+    { part_number: "-1", qty: -1 },
+  ]);
+  const [systemPartList, setSystemPartList] = useState([
+    { part_number: "-1", qty: -1 },
+  ]);
 
   return (
     <div className="App">
@@ -60,6 +79,10 @@ function App() {
             setBinAdded,
             manual,
             setManual,
+            presentPartList,
+            setPresentPartList,
+            systemPartList,
+            setSystemPartList,
           }}
         >
           <Router>
