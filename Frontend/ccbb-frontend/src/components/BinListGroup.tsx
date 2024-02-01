@@ -2,11 +2,17 @@ import ButtonGroup from "./ButtonGroup";
 import { useContext } from "react";
 import { AppContext } from "../App";
 
-function ListGroup() {
+function BinListGroup() {
   const { binList, setBinList } = useContext(AppContext);
   let bin_list: string[];
 
   const handleAddBin = () => {
+    /**
+     * Handles the "Add Bin" event
+     *
+     * @remarks
+     * Adds a blank bin to the binList context variable
+     */
     bin_list = binList;
     bin_list.push("");
     setBinList([...bin_list]);
@@ -14,6 +20,16 @@ function ListGroup() {
   };
 
   const handleEditBin = (value: string, index: number) => {
+    /**
+     * Handles the "Edit Bin" event
+     *
+     * @remarks
+     * Takes in a value and an index and edits the bin
+     * inside the binList context variable.
+     *
+     * @param value - New value (name) of the bin
+     * @param index - The index of the bin to be edited
+     */
     bin_list = binList;
     bin_list[index] = value;
     setBinList([...bin_list]);
@@ -21,12 +37,22 @@ function ListGroup() {
   };
 
   const handleClickDelete = (index: number) => {
+    /**
+     * Handles the "Click Delete" event
+     *
+     * @remarks
+     * Splices onve value from the binList context variable
+     * at the location given by the index.
+     *
+     * @param index - index of the bin to be deleted
+     */
     bin_list = binList;
     bin_list.splice(index, 1);
     setBinList([...bin_list]);
     console.log(binList);
   };
 
+  // Rendered Page
   return (
     <>
       <ul className="list-group">
@@ -76,4 +102,4 @@ function ListGroup() {
   );
 }
 
-export default ListGroup;
+export default BinListGroup;
