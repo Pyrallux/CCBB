@@ -55,7 +55,7 @@ function SelectCycle() {
   const schema = yup.object().shape({
     cycle: yup
       .number()
-      .positive("*Cycle Selection is Required")
+      .min(0, "*Cycle Selection is Required")
       .required("*Cycle Selection is Required"),
   });
 
