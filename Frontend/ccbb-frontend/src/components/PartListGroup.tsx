@@ -31,6 +31,15 @@ function PartListGroup({ type }: Props) {
   };
 
   const handleEditPartNumber = (value: string, index: number) => {
+    /**
+     * Handles the "Add Part Number" event
+     *
+     * @remarks
+     * Edits the part number with the value given at the index given
+     *
+     * @param value - New value to replace the old part_number attribute
+     * @param index - Index of the part object to be edited.
+     */
     part_list = presentPartList;
     part_list[index].part_number = value;
     setPresentPartList([...part_list]);
@@ -38,6 +47,15 @@ function PartListGroup({ type }: Props) {
   };
 
   const handleEditPartQty = (value: number, index: number) => {
+    /**
+     * Handles the "Add Part Number" event
+     *
+     * @remarks
+     * Edits the part number with the value given at the index given
+     *
+     * @param value - New value to replace the old part_number attribute
+     * @param index - Index of the part object to be edited.
+     */
     part_list = presentPartList;
     part_list[index].qty = value;
     setPresentPartList([...part_list]);
