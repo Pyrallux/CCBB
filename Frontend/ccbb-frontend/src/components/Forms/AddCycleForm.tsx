@@ -17,11 +17,11 @@ interface CycleData {
   warehouse_id?: number;
 }
 
-// Main Function of Component
 function AddCycleForm() {
   const { whse, cycle, setBinAdded } = useContext(AppContext);
+  const navigate = useNavigate();
 
-  // Defines mutation functions of cycle api
+  // Defines Mutation Add Function of cycleApi
   const addCycleMutation = useMutation({
     mutationFn: addCycle,
     onSuccess: () => {
@@ -31,10 +31,7 @@ function AddCycleForm() {
     },
   });
 
-  // Initializes context, navigate, and effect hooks needed later in script
-  const navigate = useNavigate();
-
-  // Setup yup form structure and initialize form hook
+  // Defines react-hook-form and yupResolver form structure
   const schema = yup.object().shape({
     name: yup.string().required("*Cycle Name is Required"),
     date: yup
@@ -50,8 +47,17 @@ function AddCycleForm() {
     resolver: yupResolver(schema),
   });
 
-  // Various event handlers
   const onSubmit = (data: CycleData) => {
+    /**
+     * Handles the form's submission
+     *
+     * @remarks
+     * Only runs if the yupResolver finds the form to be valid.
+     * Once the form is submitted, a mutation to the database
+     * is made with the data given.
+     *
+     * @param data - The data from the form inside an object
+     */
     addCycleMutation.mutate({
       cycle_id: cycle,
       name: data.name,
@@ -61,10 +67,19 @@ function AddCycleForm() {
   };
 
   const handleClick = (label: string) => {
+    /**
+     * Handles button click events
+     *
+     * @remarks
+     * If the button's label is return,
+     * navigates the user to the SelectCycle page.
+     *
+     * @param label - Label of button clicked
+     */
     label == "Return" && navigate("/SelectCycle");
   };
 
-  // Main Page
+  // Main Rendered Page
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
