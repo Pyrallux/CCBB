@@ -17,6 +17,7 @@ function SelectWarehouse() {
   const queryClient = useQueryClient();
   const [warehouseList, setWarehouseList] = useState(["Loading..."]);
   const [warehouseListKeys, setWarehouseListKeys] = useState([0]);
+  const [selected, setSelected] = useState(false);
   const { setWhse, setManual } = useContext(AppContext);
   const navigate = useNavigate();
 
@@ -34,7 +35,10 @@ function SelectWarehouse() {
 
   // Setup Yup Form Schema
   const schema = yup.object().shape({
-    warehouse: yup.number().required("*Warehouse Selection is Required"),
+    warehouse: yup
+      .number()
+      .positive()
+      .required("*Warehouse Selection is Required"),
   });
 
   // Setup React-Hook-Form Structure
@@ -57,6 +61,7 @@ function SelectWarehouse() {
 
   const handleSelectItem = (index: number) => {
     console.log(`Selected Element: ${index}`);
+    setSelected(true);
     setValue("warehouse", index);
   };
 
@@ -115,7 +120,16 @@ function SelectWarehouse() {
           onClick={handleClick}
         />
       </div>
-      <ButtonGroup label="Next" type="submit" onClick={handleClick} />
+      {selected ? (
+        <ButtonGroup label="Continue" type="submit" onClick={handleClick} />
+      ) : (
+        <ButtonGroup
+          label="Continue"
+          disabled={true}
+          type="submit"
+          onClick={handleClick}
+        />
+      )}
     </form>
   );
 }

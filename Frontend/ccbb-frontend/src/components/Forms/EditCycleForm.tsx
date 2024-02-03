@@ -114,7 +114,7 @@ function EditWarehouseForm() {
       deleteCycleMutation.mutate(cycle);
       navigate("/SelectCycle");
     }
-    if (label == "Return") {
+    if (label == "Cancel") {
       navigate("/SelectCycle");
     }
   };
@@ -152,7 +152,7 @@ function EditWarehouseForm() {
         <input type="date" className="form-control" {...register("date")} />
         <label className="form-label">Bins to Count</label>
         <BinListGroup />
-        <ButtonGroup label="Return" onClick={handleClick} />
+        <ButtonGroup label="Cancel" onClick={handleClick} />
         <ButtonGroup label="Done" type="submit" onClick={handleClick} />
       </form>
       <div>

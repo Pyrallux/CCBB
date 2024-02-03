@@ -76,7 +76,7 @@ function AddCycleForm() {
      *
      * @param label - Label of button clicked
      */
-    label == "Return" && navigate("/SelectCycle");
+    label == "Cancel" && navigate("/SelectCycle");
   };
 
   // Main Rendered Page
@@ -91,7 +91,7 @@ function AddCycleForm() {
         <input type="date" className="form-control" {...register("date")} />
         <label className="form-label">Bins to Count</label>
         <BinListGroup />
-        <ButtonGroup label="Return" onClick={handleClick} />
+        <ButtonGroup label="Cancel" onClick={handleClick} />
         <ButtonGroup label="Done" type="submit" onClick={handleClick} />
       </form>
     </>

@@ -30,6 +30,7 @@ function SelectCycle() {
   const [cycleNames, setCycleNames] = useState(["Loading..."]);
   const [cycleDates, setCycleDates] = useState(["Loading..."]);
   const [cycleKeys, setCycleKeys] = useState([0]);
+  const [selected, setSelected] = useState(false);
 
   const {
     isLoading,
@@ -78,6 +79,7 @@ function SelectCycle() {
 
   const handleSelectItem = (index: number) => {
     console.log(`Selected Element: ${index}`);
+    setSelected(true);
     setValue("cycle", index);
   };
 
@@ -88,7 +90,7 @@ function SelectCycle() {
 
   const handleClick = (label: string) => {
     console.log(`Button: ${label} clicked`);
-    if (label == "Return") {
+    if (label == "Back") {
       navigate("/SelectWarehouse");
     }
     if (label == "+ Add New Cycle") {
@@ -171,8 +173,17 @@ function SelectCycle() {
           onClick={handleClick}
         />
       </div>
-      <ButtonGroup label="Return" onClick={handleClick} />
-      <ButtonGroup label="Next" type="submit" onClick={handleClick} />
+      <ButtonGroup label="Back" onClick={handleClick} />
+      {selected ? (
+        <ButtonGroup label="Continue" type="submit" onClick={handleClick} />
+      ) : (
+        <ButtonGroup
+          label="Continue"
+          type="submit"
+          disabled={true}
+          onClick={handleClick}
+        />
+      )}
     </form>
   );
 }

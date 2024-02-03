@@ -10,11 +10,15 @@ function CycleCount() {
   const [binIndex, setBinIndex] = useState(0);
   const navigate = useNavigate();
 
-  const handleClickNext = () => {
-    if (binIndex < binList.length - 1) {
-      setBinIndex(binIndex + 1);
-    } else {
-      navigate("/Transactions");
+  const handleClick = (label: string) => {
+    if (label == "Continue") {
+      if (binIndex < binList.length - 1) {
+        setBinIndex(binIndex + 1);
+      } else {
+        navigate("/Transactions");
+      }
+    } else if (label == "Back") {
+      navigate("/SelectCycle");
     }
   };
 
@@ -25,7 +29,8 @@ function CycleCount() {
       <h2>Cycle: {cycle}</h2>
       <h2>Bin: {binList[binIndex]}</h2>
       <CountForm />
-      <ButtonGroup label="Next" onClick={handleClickNext} />
+      <ButtonGroup label="Back" onClick={handleClick} />
+      <ButtonGroup label="Continue" onClick={handleClick} />
     </>
   );
 }

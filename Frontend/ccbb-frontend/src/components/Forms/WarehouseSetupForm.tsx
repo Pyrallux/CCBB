@@ -75,7 +75,7 @@ function WarehouseSetupForm({ type }: Props) {
   };
 
   const handleClick = (label: string) => {
-    label == "Return" && navigate("/SelectWarehouse");
+    label == "Cancel" && navigate("/SelectWarehouse");
   };
 
   const handleChange = () => {
@@ -134,10 +134,14 @@ function WarehouseSetupForm({ type }: Props) {
           />
           <label className="form-check-label">Enable Manual Mode?</label>
         </div>
-        {type != "Setup" && (
-          <ButtonGroup label="Return" onClick={handleClick} />
+        {type == "Add" ? (
+          <>
+            <ButtonGroup label="Cancel" onClick={handleClick} />
+            <ButtonGroup label="Done" type="submit" onClick={handleClick} />
+          </>
+        ) : (
+          <ButtonGroup label="Continue" type="submit" onClick={handleClick} />
         )}
-        <ButtonGroup label="Done" type="submit" onClick={handleClick} />
       </form>
     </>
   );
