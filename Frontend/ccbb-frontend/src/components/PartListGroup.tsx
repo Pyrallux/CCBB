@@ -12,7 +12,12 @@ interface Part {
 }
 
 function PartListGroup({ type }: Props) {
-  const { presentPartList, setPresentPartList } = useContext(AppContext);
+  const {
+    presentPartList,
+    setPresentPartList,
+    systemPartList,
+    setSystemPartList,
+  } = useContext(AppContext);
 
   let part_list: Part[];
 
@@ -23,10 +28,15 @@ function PartListGroup({ type }: Props) {
      * @remarks
      * Adds a blank part to the partList context variable
      */
-    part_list = presentPartList;
-    part_list.push({ part_number: "", qty: 0 });
-    setPresentPartList([...part_list]);
-    console.log(part_list);
+    if (type == "present") {
+      part_list = presentPartList;
+      part_list.push({ part_number: "", qty: 0 });
+      setPresentPartList([...part_list]);
+    } else if (type == "system") {
+      part_list = systemPartList;
+      part_list.push({ part_number: "", qty: 0 });
+      setSystemPartList([...part_list]);
+    }
   };
 
   const handleEditPartNumber = (value: string, index: number) => {
@@ -39,10 +49,15 @@ function PartListGroup({ type }: Props) {
      * @param value - New value to replace the old part_number attribute
      * @param index - Index of the part object to be edited.
      */
-    part_list = presentPartList;
-    part_list[index].part_number = value;
-    setPresentPartList([...part_list]);
-    console.log(presentPartList);
+    if (type == "present") {
+      part_list = presentPartList;
+      part_list[index].part_number = value;
+      setPresentPartList([...part_list]);
+    } else if (type == "system") {
+      part_list = systemPartList;
+      part_list[index].part_number = value;
+      setSystemPartList([...part_list]);
+    }
   };
 
   const handleEditPartQty = (value: number, index: number) => {
@@ -55,10 +70,15 @@ function PartListGroup({ type }: Props) {
      * @param value - New value to replace the old part_number attribute
      * @param index - Index of the part object to be edited.
      */
-    part_list = presentPartList;
-    part_list[index].qty = value;
-    setPresentPartList([...part_list]);
-    console.log(presentPartList);
+    if (type == "present") {
+      part_list = presentPartList;
+      part_list[index].qty = value;
+      setPresentPartList([...part_list]);
+    } else if (type == "system") {
+      part_list = systemPartList;
+      part_list[index].qty = value;
+      setSystemPartList([...part_list]);
+    }
   };
 
   const handleClickDelete = (index: number) => {
@@ -71,70 +91,133 @@ function PartListGroup({ type }: Props) {
      *
      * @param index - index of the part to be deleted
      */
-    part_list = presentPartList;
-    part_list.splice(index, 1);
-    setPresentPartList([...part_list]);
-    console.log(presentPartList);
+    if (type == "present") {
+      part_list = presentPartList;
+      part_list.splice(index, 1);
+      setPresentPartList([...part_list]);
+    } else if (type == "system") {
+      part_list = systemPartList;
+      part_list.splice(index, 1);
+      setSystemPartList([...part_list]);
+    }
   };
 
   // Rendered Page
   return (
     <>
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Part Number</th>
-            <th scope="col">QTY</th>
-          </tr>
-        </thead>
-        {presentPartList.length === 0 && (
-          <p className="text text-danger fst-italic">No Parts Found!</p>
-        )}
-
-        <tbody>
-          {presentPartList.map((part, index) => (
-            <tr className={"table-active table-light bg-white"}>
-              <th scope="row">{index + 1}</th>
-              <td>
-                <input
-                  defaultValue={part.part_number}
-                  type="text"
-                  className="form-control me-3"
-                  onBlur={(e) => handleEditPartNumber(e.target.value, index)}
-                />
-              </td>
-              <td>
-                <div className="d-flex justify-content-between">
-                  <input
-                    defaultValue={part.qty}
-                    type="number"
-                    className="form-control me-3"
-                    onBlur={(e) =>
-                      handleEditPartQty(Number(e.target.value), index)
-                    }
-                  />
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => handleClickDelete(index)}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      className="bi bi-trash-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
-                    </svg>
-                  </button>
-                </div>
-              </td>
+      {type == "present" ? (
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Part Number</th>
+              <th scope="col">QTY</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          {presentPartList.length === 0 && (
+            <p className="text text-danger fst-italic">No Parts Found!</p>
+          )}
+
+          <tbody>
+            {presentPartList.map((part, index) => (
+              <tr className={"table-active table-light bg-white"}>
+                <th scope="row">{index + 1}</th>
+                <td>
+                  <input
+                    defaultValue={part.part_number}
+                    type="text"
+                    className="form-control me-3"
+                    onBlur={(e) => handleEditPartNumber(e.target.value, index)}
+                  />
+                </td>
+                <td>
+                  <div className="d-flex justify-content-between">
+                    <input
+                      defaultValue={part.qty}
+                      type="number"
+                      className="form-control me-3"
+                      onBlur={(e) =>
+                        handleEditPartQty(Number(e.target.value), index)
+                      }
+                    />
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => handleClickDelete(index)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        className="bi bi-trash-fill"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Part Number</th>
+              <th scope="col">QTY</th>
+            </tr>
+          </thead>
+          {systemPartList.length === 0 && (
+            <p className="text text-danger fst-italic">No Parts Found!</p>
+          )}
+
+          <tbody>
+            {systemPartList.map((part, index) => (
+              <tr className={"table-active table-light bg-white"}>
+                <th scope="row">{index + 1}</th>
+                <td>
+                  <input
+                    defaultValue={part.part_number}
+                    type="text"
+                    className="form-control me-3"
+                    onBlur={(e) => handleEditPartNumber(e.target.value, index)}
+                  />
+                </td>
+                <td>
+                  <div className="d-flex justify-content-between">
+                    <input
+                      defaultValue={part.qty}
+                      type="number"
+                      className="form-control me-3"
+                      onBlur={(e) =>
+                        handleEditPartQty(Number(e.target.value), index)
+                      }
+                    />
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => handleClickDelete(index)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        className="bi bi-trash-fill"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </>
   );
 }

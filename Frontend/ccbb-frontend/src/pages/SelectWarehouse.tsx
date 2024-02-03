@@ -37,7 +37,7 @@ function SelectWarehouse() {
   const schema = yup.object().shape({
     warehouse: yup
       .number()
-      .positive()
+      .min(-1, "*Warehouse Selection is Required")
       .required("*Warehouse Selection is Required"),
   });
 
