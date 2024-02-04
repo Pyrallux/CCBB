@@ -107,7 +107,7 @@
     const updateWarehouseMutation = useMutation({
         mutationFn: updateWarehouse,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey:          ["editCycleBins"] });
+            queryClient.invalidateQueries({ queryKey: ["editCycleBins"] });
         },
     });
     ```
