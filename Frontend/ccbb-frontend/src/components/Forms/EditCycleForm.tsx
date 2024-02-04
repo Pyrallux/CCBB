@@ -33,7 +33,7 @@ function EditWarehouseForm() {
     data: cycleData,
   } = useQuery({
     queryKey: ["editCycle"],
-    queryFn: () => getCycleDetail(cycle), // ** REMINDER ** This should query the warehouse selected
+    queryFn: () => getCycleDetail(cycle),
   });
 
   const deleteCycleMutation = useMutation({

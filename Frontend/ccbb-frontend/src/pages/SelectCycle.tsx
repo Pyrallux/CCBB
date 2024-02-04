@@ -72,8 +72,7 @@ function SelectCycle() {
 
   const onSubmit = (data: Data) => {
     console.log(data);
-    // ** MISSING ** send selected cycle count to database
-    setCycle(data.cycle);
+    setCycle(cycleKeys[data.cycle]);
     navigate("/CycleCount");
   };
 

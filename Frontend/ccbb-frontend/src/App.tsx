@@ -22,6 +22,8 @@ export const AppContext = createContext<{
   setWhse: (newValue: number) => void;
   cycle: number;
   setCycle: (newValue: number) => void;
+  bin: number;
+  setBin: (newValue: number) => void;
   binList: string[];
   setBinList: (newValue: string[]) => void;
   binAdded: boolean;
@@ -37,15 +39,17 @@ export const AppContext = createContext<{
   setWhse: () => undefined,
   cycle: -1,
   setCycle: () => undefined,
+  bin: -1,
+  setBin: () => undefined,
   binList: [""],
   setBinList: () => undefined,
   binAdded: false,
   setBinAdded: () => undefined,
   manual: false,
   setManual: () => undefined,
-  presentPartList: [{ part_number: "-1", qty: -1 }],
+  presentPartList: [{ part_number: "", qty: 0 }],
   setPresentPartList: () => undefined,
-  systemPartList: [{ part_number: "-1", qty: -1 }],
+  systemPartList: [{ part_number: "", qty: 0 }],
   setSystemPartList: () => undefined,
 });
 
@@ -54,14 +58,15 @@ function App() {
 
   const [whse, setWhse] = useState(-1);
   const [cycle, setCycle] = useState(-1);
+  const [bin, setBin] = useState(-1);
   const [binList, setBinList] = useState([""]);
   const [binAdded, setBinAdded] = useState(false);
   const [manual, setManual] = useState(false);
   const [presentPartList, setPresentPartList] = useState([
-    { part_number: "-1", qty: -1 },
+    { part_number: "", qty: 0 },
   ]);
   const [systemPartList, setSystemPartList] = useState([
-    { part_number: "-1", qty: -1 },
+    { part_number: "", qty: 0 },
   ]);
 
   return (
@@ -73,6 +78,8 @@ function App() {
             setWhse,
             cycle,
             setCycle,
+            bin,
+            setBin,
             binList,
             setBinList,
             binAdded,
