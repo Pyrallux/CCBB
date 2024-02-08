@@ -37,6 +37,7 @@ function CycleCount() {
   } = useContext(AppContext);
   const [binIndex, setBinIndex] = useState(0);
   const [binListIds, setBinListIds] = useState([-1]);
+
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
