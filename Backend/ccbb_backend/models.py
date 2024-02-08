@@ -57,11 +57,11 @@ class PresentPart(models.Model):
     present_part_id = models.AutoField(primary_key=True)
     number = models.CharField(max_length=100)
     quantity = models.FloatField()
-    bin_id = models.ForeignKey(Cycle, on_delete=models.CASCADE)
+    bin_id = models.ForeignKey(Bin, on_delete=models.CASCADE)
 
 
 class SystemPart(models.Model):
     system_part_id = models.AutoField(primary_key=True)
     number = models.CharField(max_length=100)
     quantity = models.FloatField(max_length=100)
-    bin_id = models.ForeignKey(Cycle, on_delete=models.CASCADE)
+    bin_id = models.ForeignKey(Bin, on_delete=models.CASCADE)
