@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path
 from . import views
@@ -40,8 +41,10 @@ urlpatterns = [
     path("bins/parent/<int:parent_id>", views.bin_parent),
     path("present_parts/", views.present_part_list),
     path("present_parts/<int:id>", views.present_part_detail),
+    path("present_parts/parent/<int:parent_id>", views.present_part_parent),
     path("system_parts/", views.system_part_list),
     path("system_parts/<int:id>", views.system_part_detail),
+    path("system_parts/parent/<int:parent_id>", views.system_part_parent),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

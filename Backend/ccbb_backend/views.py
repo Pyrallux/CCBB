@@ -355,6 +355,14 @@ def present_part_detail(request, id, format=None):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@api_view(["GET"])
+def present_part_parent(request, parent_id, format=None):
+    if request.method == "GET":
+        present_part = PresentPart.objects.filter(bin_id=parent_id)
+        serializer = PresentPartSerializer(present_part, many=True)
+        return Response(serializer.data)
+
+
 # SystemPart
 @api_view(["GET", "POST", "PUT", "DELETE"])
 def system_part_list(request, format=None):
@@ -399,3 +407,11 @@ def system_part_detail(request, id, format=None):
     elif request.method == "DELETE":
         systemPart.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(["GET"])
+def system_part_parent(request, parent_id, format=None):
+    if request.method == "GET":
+        system_part = SystemPart.objects.filter(bin_id=parent_id)
+        serializer = SystemPartSerializer(system_part, many=True)
+        return Response(serializer.data)
