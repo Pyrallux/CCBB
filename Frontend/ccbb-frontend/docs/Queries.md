@@ -140,3 +140,17 @@
     ```
 
     - Note that, in this case, the `warehouses` variable is the data from the `useQuery` hook request.
+
+  - Additionally, some queries may rely on other queries to be completed first. In this circumstance, this code cane be used:
+
+    ```ts
+    const cycleId = cycleData?.cycle_id;
+    const { data: binData } = useQuery({
+      queryKey: ["editCycleBins"],
+      queryFn: () => getBinParent(cycleId),
+      enabled: !!cycleId,
+    });
+
+    ```
+
+    - Where, in this example, `cycleData` is the query data that `binData` is reliant on.
