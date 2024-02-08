@@ -1,6 +1,9 @@
 import ButtonGroup from "./ButtonGroup";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AppContext } from "../App";
+import { useQuery } from "@tanstack/react-query";
+import { getPresentPartParent } from "../api/presentPartsApi";
+import { getSystemPartParent } from "../api/systemPartsApi";
 
 interface Props {
   type: "present" | "system";
@@ -13,13 +16,50 @@ interface Part {
 
 function PartListGroup({ type }: Props) {
   const {
+    bin,
     presentPartList,
     setPresentPartList,
     systemPartList,
     setSystemPartList,
+    manual,
   } = useContext(AppContext);
 
   let part_list: Part[];
+
+  const { data: presentPartData, refetch: refetchPresentParts } = useQuery({
+    queryKey: ["cycleCountPresentParts"],
+    queryFn: () => getPresentPartParent(bin),
+    enabled: !!(bin > -1),
+  });
+
+  const { data: systemPartData, refetch: refetchSystemParts } = useQuery({
+    queryKey: ["cycleCountSystemParts"],
+    queryFn: () => getSystemPartParent(bin),
+    enabled: !!(bin > -1 && manual),
+  });
+
+  useEffect(() => {
+    let present_part_list: Part[] = [];
+    for (let i = 0; i < presentPartData?.length; i++) {
+      present_part_list.push({
+        part_number: presentPartData[i].number,
+        qty: presentPartData[i].quantity,
+      });
+    }
+    setPresentPartList([...present_part_list]);
+    console.log("Present part data updated.");
+  }, [presentPartData]);
+
+  useEffect(() => {
+    let system_part_list: Part[] = [];
+    for (let i = 0; i < systemPartData?.length; i++) {
+      system_part_list.push({
+        part_number: systemPartData[i].number,
+        qty: systemPartData[i].quantity,
+      });
+    }
+    setSystemPartList([...system_part_list]);
+  }, [systemPartData]);
 
   const handleAddPart = () => {
     /**

@@ -22,7 +22,6 @@ interface Part {
 }
 
 function CycleCount() {
-  // ** MISSING ** Pull data from database, display cycle count gui, cycle count logic??
   const {
     whse,
     cycle,
@@ -52,19 +51,6 @@ function CycleCount() {
   } = useQuery({
     queryKey: ["cycleCountBins"],
     queryFn: () => getBinParent(cycle),
-  });
-
-  // BIN INDEX NEEDS TO BE LOADED DIFFERENTLY HERE
-  const { data: presentPartData } = useQuery({
-    queryKey: ["cycleCountPresentParts"],
-    queryFn: () => getPresentPartParent(bin),
-    enabled: !!bin,
-  });
-
-  const { data: systemPartData } = useQuery({
-    queryKey: ["cycleCountSystemParts"],
-    queryFn: () => getSystemPartParent(bin),
-    enabled: !!(bin && manual),
   });
 
   const addPresentPartMutation = useMutation({
@@ -97,37 +83,15 @@ function CycleCount() {
     console.log("Current Bin is:", bin);
   }, [binData]);
 
-  useEffect(() => {
-    let present_part_list: Part[] = [];
-    for (let i = 0; i < presentPartData?.length; i++) {
-      present_part_list.push({
-        part_number: presentPartData[i].number,
-        qty: presentPartData[i].quantity,
-      });
-    }
-    setPresentPartList(present_part_list);
-  }, [presentPartData]);
-
-  useEffect(() => {
-    let system_part_list: Part[] = [];
-    for (let i = 0; i < systemPartData?.length; i++) {
-      system_part_list.push({
-        part_number: systemPartData[i].number,
-        qty: systemPartData[i].quantity,
-      });
-    }
-    setSystemPartList(system_part_list);
-  }, [systemPartData]);
-
   const handleClick = (label: string) => {
     if (label == "Continue") {
       if (binIndex < binList.length - 1) {
         setBin(binListIds[binIndex + 1]);
         setBinIndex(binIndex + 1);
         console.log("Updated Bin to:", bin);
-        for (let i = 0; i < presentPartData?.length; i++) {
-          deletePresentPartMutation.mutate(binListIds[i]);
-        }
+        // for (let i = 0; i < presentPartData?.length; i++) { Needs to be integrated in the PartListGroup File somehow
+        //   deletePresentPartMutation.mutate(presentPartData[i].present_part_id);
+        // }
         for (let i = 0; i < presentPartList.length; i++) {
           addPresentPartMutation.mutate({
             number: presentPartList[i].part_number,
