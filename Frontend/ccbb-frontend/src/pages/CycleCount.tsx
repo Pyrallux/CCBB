@@ -38,6 +38,7 @@ function CycleCount() {
   } = useContext(AppContext);
   const [binIndex, setBinIndex] = useState(0);
   const [binListIds, setBinListIds] = useState([-1]);
+
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -54,7 +55,6 @@ function CycleCount() {
     queryFn: () => getBinParent(cycle),
   });
 
-  // BIN INDEX NEEDS TO BE LOADED DIFFERENTLY HERE
   const { data: presentPartData } = useQuery({
     queryKey: ["cycleCountPresentParts"],
     queryFn: () => getPresentPartParent(bin),
