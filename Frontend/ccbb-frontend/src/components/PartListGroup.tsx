@@ -26,41 +26,6 @@ function PartListGroup({ type }: Props) {
 
   let part_list: Part[];
 
-  const { data: presentPartData, refetch: refetchPresentParts } = useQuery({
-    queryKey: ["cycleCountPresentParts"],
-    queryFn: () => getPresentPartParent(bin),
-    enabled: !!(bin > -1),
-  });
-
-  const { data: systemPartData, refetch: refetchSystemParts } = useQuery({
-    queryKey: ["cycleCountSystemParts"],
-    queryFn: () => getSystemPartParent(bin),
-    enabled: !!(bin > -1 && manual),
-  });
-
-  useEffect(() => {
-    let present_part_list: Part[] = [];
-    for (let i = 0; i < presentPartData?.length; i++) {
-      present_part_list.push({
-        part_number: presentPartData[i].number,
-        qty: presentPartData[i].quantity,
-      });
-    }
-    setPresentPartList([...present_part_list]);
-    console.log("Present part data updated.");
-  }, [presentPartData]);
-
-  useEffect(() => {
-    let system_part_list: Part[] = [];
-    for (let i = 0; i < systemPartData?.length; i++) {
-      system_part_list.push({
-        part_number: systemPartData[i].number,
-        qty: systemPartData[i].quantity,
-      });
-    }
-    setSystemPartList([...system_part_list]);
-  }, [systemPartData]);
-
   const handleAddPart = () => {
     /**
      * Handles the "Add Part" event
@@ -156,7 +121,9 @@ function PartListGroup({ type }: Props) {
               </tr>
             </thead>
             {presentPartList.length === 0 && (
-              <p className="text text-danger fst-italic">No Parts Found!</p>
+              <p className="text text-danger fst-italic">
+                Please Add a Part Below
+              </p>
             )}
 
             <tbody>
@@ -222,7 +189,9 @@ function PartListGroup({ type }: Props) {
               </tr>
             </thead>
             {systemPartList.length === 0 && (
-              <p className="text text-danger fst-italic">No Parts Found!</p>
+              <p className="text text-danger fst-italic">
+                Please Add a Part Below
+              </p>
             )}
 
             <tbody>
