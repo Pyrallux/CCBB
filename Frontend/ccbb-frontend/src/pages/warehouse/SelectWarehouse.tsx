@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../App";
+import { AppContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import ButtonGroup from "../components/ButtonGroup";
-import ListGroup from "../components/ListGroup";
+import ButtonGroup from "../../components/ButtonGroup";
+import ListGroup from "../../components/ListGroup";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getWarehouses } from "../api/warehousesApi";
+import { getWarehouses } from "../../api/warehousesApi";
 
 interface Data {
   warehouse: number;

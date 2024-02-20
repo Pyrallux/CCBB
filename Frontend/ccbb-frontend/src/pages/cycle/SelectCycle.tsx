@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../App";
+import { AppContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Table2Col from "../components/Table2Col";
-import ButtonGroup from "../components/ButtonGroup";
-import { getCycleParent } from "../api/cyclesApi";
+import Table2Col from "../../components/Table2Col";
+import ButtonGroup from "../../components/ButtonGroup";
+import { getCycleParent } from "../../api/cyclesApi";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { addBin } from "../api/binsApi";
+import { addBin } from "../../api/binsApi";
 
 interface Data {
   cycle: number;

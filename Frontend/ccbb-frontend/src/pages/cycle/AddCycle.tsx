@@ -1,4 +1,4 @@
-import AddCycleForm from "../components/Forms/AddCycleForm";
+import AddCycleForm from "../../components/Forms/AddCycleForm";
 
 function AddCycle() {
   return (
