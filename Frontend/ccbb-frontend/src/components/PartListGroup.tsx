@@ -1,9 +1,6 @@
 import ButtonGroup from "./ButtonGroup";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { AppContext } from "../App";
-import { useQuery } from "@tanstack/react-query";
-import { getPresentPartParent } from "../api/presentPartsApi";
-import { getSystemPartParent } from "../api/systemPartsApi";
 
 interface Props {
   type: "present" | "system";
