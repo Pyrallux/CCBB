@@ -1,4 +1,3 @@
-// Make New Table4Col Component
 import { AppContext } from "../App";
 import { useContext } from "react";
 

@@ -8,8 +8,9 @@ import Home from "./pages/Home";
 import SelectCycle from "./pages/cycle/SelectCycle";
 import AddCycle from "./pages/cycle/AddCycle";
 import EditCycle from "./pages/cycle/EditCycle";
-import Transactions from "./pages/Transactions";
 import CycleCount from "./pages/CycleCount";
+import Transactions from "./pages/Transactions";
+import InventoryManager from "./pages/InventoryManager";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 interface Part {
@@ -101,8 +102,9 @@ function App() {
               <Route path="/SelectCycle" element={<SelectCycle />} />
               <Route path="/AddCycle" element={<AddCycle />} />
               <Route path="/EditCycle" element={<EditCycle />} />
-              <Route path="/Transactions" element={<Transactions />} />
               <Route path="/CycleCount" element={<CycleCount />} />
+              <Route path="/Transactions" element={<Transactions />} />
+              <Route path="/InventoryManager" element={<InventoryManager />} />
               <Route path="*" element={<Home />} />
             </Routes>
           </Router>

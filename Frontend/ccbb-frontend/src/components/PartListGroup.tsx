@@ -184,9 +184,7 @@ function PartListGroup({ type }: Props) {
               </tr>
             </thead>
             {systemPartList.length === 0 && (
-              <p className="text text-danger fst-italic">
-                Please Add a Part Below
-              </p>
+              <p className="text fst-italic">Please Add a Part Below</p>
             )}
 
             <tbody>

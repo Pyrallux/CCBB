@@ -21,6 +21,14 @@ interface Part {
   qty: number;
 }
 
+interface MissingPart {
+  number: string;
+  qty: number;
+  location: string;
+  date: string;
+  warehouse_id: number;
+}
+
 function CountForm() {
   const {
     cycle,
@@ -89,6 +97,7 @@ function CountForm() {
     },
   });
 
+  // ** MISSING ** Getting the system part list frome epicor instead of UI
   const { data: systemPartData, refetch: refetchSystemParts } = useQuery({
     queryKey: ["cycleCountSystemParts"],
     queryFn: () => getSystemPartParent(bin),
@@ -145,6 +154,13 @@ function CountForm() {
     console.log("Updated Bin to:", bin);
   }, [binIndex]);
 
+  const generateMissingPartLists = (
+    systemParts: Part[],
+    presentParts: Part[]
+  ) => {
+    // Add to potential physically and systematically missing part list
+  };
+
   const handleClick = (label: string) => {
     if (label == "Continue") {
       if (binIndex < binList.length - 1) {
@@ -170,9 +186,11 @@ function CountForm() {
             });
           }
         }
+        generateMissingPartLists(presentPartList, systemPartList);
         setBinIndex(binIndex + 1);
       } else {
-        navigate("/Transactions");
+        // Commit the potential missing part lists
+        navigate("/InventoryManager");
       }
     } else if (label == "Back") {
       if (binIndex - 1 >= 0) {
@@ -201,6 +219,7 @@ function CountForm() {
               });
             }
           }
+          // Remove the items in the potential missing part lists
           setBinIndex(binIndex - 1);
         }
       } else {
