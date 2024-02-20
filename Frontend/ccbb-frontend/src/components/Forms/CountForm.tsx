@@ -23,7 +23,6 @@ interface Part {
 
 function CountForm() {
   const {
-    whse,
     cycle,
     bin,
     setBin,
@@ -51,7 +50,7 @@ function CountForm() {
     queryFn: () => getBinParent(cycle),
   });
 
-  const { data: presentPartData, refetch } = useQuery({
+  const { data: presentPartData, refetch: refetchPresentParts } = useQuery({
     queryKey: ["cycleCountPresentParts"],
     queryFn: () => getPresentPartParent(bin),
     enabled: !!(bin > -1),
@@ -63,7 +62,7 @@ function CountForm() {
       queryKey: ["cycleCountPresentParts"],
     });
     setTimeout(() => {
-      refetch;
+      refetchPresentParts;
       let present_part_list: Part[] = [];
       for (let i = 0; i < presentPartData?.length; i++) {
         present_part_list.push({
@@ -90,6 +89,45 @@ function CountForm() {
     },
   });
 
+  const { data: systemPartData, refetch: refetchSystemParts } = useQuery({
+    queryKey: ["cycleCountSystemParts"],
+    queryFn: () => getSystemPartParent(bin),
+    enabled: !!(bin > -1 && manual),
+    refetchInterval: 1500,
+  });
+
+  useEffect(() => {
+    queryClient.invalidateQueries({
+      queryKey: ["cycleCountSystemParts"],
+    });
+    setTimeout(() => {
+      refetchSystemParts;
+      let system_part_list: Part[] = [];
+      for (let i = 0; i < systemPartData?.length; i++) {
+        system_part_list.push({
+          part_number: systemPartData[i].number,
+          qty: systemPartData[i].quantity,
+        });
+      }
+      setSystemPartList([...system_part_list]);
+      console.log("System part data updated.");
+    }, 750);
+  }, [systemPartData, bin]);
+
+  const addSystemPartMutation = useMutation({
+    mutationFn: addSystemPart,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cycleCountSystemParts"] });
+    },
+  });
+
+  const deleteSystemPartMutation = useMutation({
+    mutationFn: deleteSystemPart,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cycleCountSystemParts"] });
+    },
+  });
+
   useEffect(() => {
     let bin_names: string[] = [];
     let bin_ids: number[] = [];
@@ -106,6 +144,7 @@ function CountForm() {
     setBin(binListIds[binIndex]);
     console.log("Updated Bin to:", bin);
   }, [binIndex]);
+
   const handleClick = (label: string) => {
     if (label == "Continue") {
       if (binIndex < binList.length - 1) {
@@ -119,12 +158,54 @@ function CountForm() {
             bin_id: bin,
           });
         }
+        if (manual) {
+          for (let i = 0; i < systemPartData?.length; i++) {
+            deleteSystemPartMutation.mutate(systemPartData[i].system_part_id);
+          }
+          for (let i = 0; i < systemPartList.length; i++) {
+            addSystemPartMutation.mutate({
+              number: systemPartList[i].part_number,
+              quantity: systemPartList[i].qty,
+              bin_id: bin,
+            });
+          }
+        }
         setBinIndex(binIndex + 1);
       } else {
         navigate("/Transactions");
       }
     } else if (label == "Back") {
-      navigate("/SelectCycle");
+      if (binIndex - 1 >= 0) {
+        if (binIndex < binList.length - 1) {
+          for (let i = 0; i < presentPartData?.length; i++) {
+            deletePresentPartMutation.mutate(
+              presentPartData[i].present_part_id
+            );
+          }
+          for (let i = 0; i < presentPartList.length; i++) {
+            addPresentPartMutation.mutate({
+              number: presentPartList[i].part_number,
+              quantity: presentPartList[i].qty,
+              bin_id: bin,
+            });
+          }
+          if (manual) {
+            for (let i = 0; i < systemPartData?.length; i++) {
+              deleteSystemPartMutation.mutate(systemPartData[i].system_part_id);
+            }
+            for (let i = 0; i < systemPartList.length; i++) {
+              addSystemPartMutation.mutate({
+                number: systemPartList[i].part_number,
+                quantity: systemPartList[i].qty,
+                bin_id: bin,
+              });
+            }
+          }
+          setBinIndex(binIndex - 1);
+        }
+      } else {
+        navigate("/SelectCycle");
+      }
     }
   };
 
@@ -139,7 +220,6 @@ function CountForm() {
     <>
       <h1>
         <b>Enter Details for Bin: {binList[binIndex]}</b>
-        {bin}
       </h1>
       <div className="container">
         <div className="row">

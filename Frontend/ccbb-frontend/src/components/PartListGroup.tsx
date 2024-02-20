@@ -16,12 +16,10 @@ interface Part {
 
 function PartListGroup({ type }: Props) {
   const {
-    bin,
     presentPartList,
     setPresentPartList,
     systemPartList,
     setSystemPartList,
-    manual,
   } = useContext(AppContext);
 
   let part_list: Part[];
