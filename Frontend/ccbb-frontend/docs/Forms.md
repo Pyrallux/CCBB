@@ -1,11 +1,11 @@
-# Patterns
+# Forms
 
-Below is a a list of common patterns used in this application.
+- This pattern describes how forms are made throughout the application using  `react-hook-form` and `yup`.
 
-- ## Forms
+- ## Setup
 
-    - Forms in this app use a combination of react-hook-form and yupResolver.
-    - Imports are as follows:
+  - Forms in this app use a combination of react-hook-form and yupResolver.
+  - Imports are as follows:
 
     ```ts
     import { useForm } from "react-hook-form";
@@ -21,9 +21,8 @@ Below is a a list of common patterns used in this application.
     <button label="Done" type="submit" />
     </form>
     ```
-    
 
-    - Additionally, the useForm hook should be used as such:
+  - Additionally, the useForm hook should be used as such:
 
     ```ts
     const {
@@ -35,9 +34,9 @@ Below is a a list of common patterns used in this application.
      });
     ```
 
-    - The attributes in the code above such as `register, handleSubmit, and formState` are used for state management of the form.
-    - Note that in the above code, a `yupResolver` is defined and passed a `schema` (and therefore the schema must be defined above it). 
-    - An example process for defining a `schema` is as follows:
+  - The attributes in the code above such as `register, handleSubmit, and formState` are used for state management of the form.
+  - Note that in the above code, a `yupResolver` is defined and passed a `schema` (and therefore the schema must be defined above it).
+  - An example process for defining a `schema` is as follows:
 
     ```ts
     const schema = yup.object().shape({
@@ -46,23 +45,24 @@ Below is a a list of common patterns used in this application.
             .date()
             .min(new Date(), "*Date Must be in the future")
             .required("*Cycle Date is Required"),
-  });
+    });
     ```
 
-    - Note all the strings being passed into the objects on each element of the `schema` are used to display on the screen as part of the `errors` attribute of the `useForm` hook.
-    - With each object inside of the yup resolver's shape, a value must be registered inside the input tag as follows:
+  - Note all the strings being passed into the objects on each element of the `schema` are used to display on the screen as part of the `errors` attribute of the `useForm` hook.
+  - With each object inside of the yup resolver's shape, a value must be registered inside the input tag as follows:
 
     ```html
     <input type="text" className="form-control" {...register("name")} />
     <input type="date" className="form-control" {...register("date")} />
     ```
-    - Error handling should be done as follows within the TSX object:
-    
-    ```html
+
+  - Error handling should be done as follows within the TSX object:
+
+    ```jsx
     <p className="ms-3 text-danger fst-italic">{errors.name?.message}</p>
     ```
 
-    - Finally, define an onSubmit function (that will only execute when the yupResolver is valid) and watch you form do its thing!
+  - Finally, define an onSubmit function (that will only execute when the yupResolver is valid) and watch you form do its thing!
 
     ```ts
     const onSubmit = () => {
