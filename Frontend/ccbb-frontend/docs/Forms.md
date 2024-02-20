@@ -16,7 +16,7 @@
     - In order to create a form the whole TSX objects should be wrapped in a `<form>` tag.
     - The `<form>` tag will also need an `onSubmit` tag and a child submit button defined as such:
 
-    ```html
+    ```tsx
     <form onSubmit={handleSubmit(onSubmit)}>
     <button label="Done" type="submit" />
     </form>
@@ -51,14 +51,14 @@
   - Note all the strings being passed into the objects on each element of the `schema` are used to display on the screen as part of the `errors` attribute of the `useForm` hook.
   - With each object inside of the yup resolver's shape, a value must be registered inside the input tag as follows:
 
-    ```html
+    ```tsx
     <input type="text" className="form-control" {...register("name")} />
     <input type="date" className="form-control" {...register("date")} />
     ```
 
   - Error handling should be done as follows within the TSX object:
 
-    ```jsx
+    ```tsx
     <p className="ms-3 text-danger fst-italic">{errors.name?.message}</p>
     ```
 
