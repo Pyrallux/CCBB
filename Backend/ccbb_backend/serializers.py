@@ -26,36 +26,6 @@ class WarehouseSerializer(serializers.ModelSerializer):
         ]
 
 
-class PhysicallyMissingPartSerializer(serializers.ModelSerializer):
-    warehouse_id = serializers.PrimaryKeyRelatedField(queryset=Warehouse.objects.all())
-
-    class Meta:
-        model = PhysicallyMissingPart
-        fields = [
-            "physically_missing_part_id",
-            "number",
-            "quantity",
-            "location",
-            "date",
-            "warehouse_id",
-        ]
-
-
-class SystematicallyMissingPartSerializer(serializers.ModelSerializer):
-    warehouse_id = serializers.PrimaryKeyRelatedField(queryset=Warehouse.objects.all())
-
-    class Meta:
-        model = SystematicallyMissingPart
-        fields = [
-            "systematically_missing_part_id",
-            "number",
-            "quantity",
-            "location",
-            "date",
-            "warehouse_id",
-        ]
-
-
 class TransactionSerializer(serializers.ModelSerializer):
     warehouse_id = serializers.PrimaryKeyRelatedField(queryset=Warehouse.objects.all())
 
@@ -102,3 +72,31 @@ class SystemPartSerializer(serializers.ModelSerializer):
     class Meta:
         model = SystemPart
         fields = ["system_part_id", "number", "quantity", "bin_id"]
+
+
+class PhysicallyMissingPartSerializer(serializers.ModelSerializer):
+    bin_id = serializers.PrimaryKeyRelatedField(queryset=Bin.objects.all())
+
+    class Meta:
+        model = PhysicallyMissingPart
+        fields = [
+            "physically_missing_part_id",
+            "number",
+            "quantity",
+            "date",
+            "bin_id",
+        ]
+
+
+class SystematicallyMissingPartSerializer(serializers.ModelSerializer):
+    bin_id = serializers.PrimaryKeyRelatedField(queryset=Bin.objects.all())
+
+    class Meta:
+        model = SystematicallyMissingPart
+        fields = [
+            "systematically_missing_part_id",
+            "number",
+            "quantity",
+            "date",
+            "bin_id",
+        ]

@@ -116,9 +116,7 @@ function PartListGroup({ type }: Props) {
               </tr>
             </thead>
             {presentPartList.length === 0 && (
-              <p className="text text-danger fst-italic">
-                Please Add a Part Below
-              </p>
+              <p className="text fst-italic">Please Add a Part Below</p>
             )}
 
             <tbody>
@@ -167,7 +165,7 @@ function PartListGroup({ type }: Props) {
             </tbody>
           </table>
           <ButtonGroup
-            label="+ Add New Bin"
+            label="+ Add New Part"
             style="outline-secondary"
             margin={false}
             onClick={handleAddPart}
@@ -233,7 +231,7 @@ function PartListGroup({ type }: Props) {
             </tbody>
           </table>
           <ButtonGroup
-            label="+ Add New Bin"
+            label="+ Add New Part"
             style="outline-secondary"
             margin={false}
             onClick={handleAddPart}

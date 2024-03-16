@@ -53,108 +53,6 @@ def warehouse_detail(request, id, format=None):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# PhysicallyMissingPart
-@api_view(["GET", "POST", "PUT", "DELETE"])
-def physically_missing_part_list(request, format=None):
-    if request.method == "GET":
-        physicallyMissingPart = PhysicallyMissingPart.objects.all()
-        serializer = PhysicallyMissingPartSerializer(physicallyMissingPart, many=True)
-        return Response(serializer.data)
-    elif request.method == "POST":
-        serializer = PhysicallyMissingPartSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == "PUT":
-        serializer = PhysicallyMissingPartSerializer(
-            physicallyMissingPart, data=request.data
-        )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == "DELETE":
-        physicallyMissingPart = PhysicallyMissingPart.objects.all()
-        physicallyMissingPart.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-@api_view(["GET", "PUT", "DELETE"])
-def physically_missing_part_detail(request, id, format=None):
-    try:
-        physicallyMissingPart = PhysicallyMissingPart.objects.get(pk=id)
-    except PhysicallyMissingPart.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == "GET":
-        serializer = PhysicallyMissingPartSerializer(physicallyMissingPart)
-        return Response(serializer.data)
-    elif request.method == "PUT":
-        serializer = PhysicallyMissingPartSerializer(
-            physicallyMissingPart, data=request.data
-        )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == "DELETE":
-        physicallyMissingPart.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-# SystematicallyMissingPart
-@api_view(["GET", "POST", "PUT", "DELETE"])
-def systematically_missing_part_list(request, format=None):
-    if request.method == "GET":
-        systematicallyMissingPart = SystematicallyMissingPart.objects.all()
-        serializer = SystematicallyMissingPartSerializer(
-            systematicallyMissingPart, many=True
-        )
-        return Response(serializer.data)
-    elif request.method == "POST":
-        serializer = SystematicallyMissingPartSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == "PUT":
-        serializer = SystematicallyMissingPartSerializer(
-            systematicallyMissingPart, data=request.data
-        )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == "DELETE":
-        systematicallyMissingPart = SystematicallyMissingPart.objects.all()
-        systematicallyMissingPart.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-@api_view(["GET", "PUT", "DELETE"])
-def systematically_missing_part_detail(request, id, format=None):
-    try:
-        systematicallyMissingPart = SystematicallyMissingPart.objects.get(pk=id)
-    except SystematicallyMissingPart.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == "GET":
-        serializer = SystematicallyMissingPartSerializer(systematicallyMissingPart)
-        return Response(serializer.data)
-    elif request.method == "PUT":
-        serializer = SystematicallyMissingPartSerializer(
-            systematicallyMissingPart, data=request.data
-        )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == "DELETE":
-        systematicallyMissingPart.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
 # Transaction
 @api_view(["GET", "POST", "PUT", "DELETE"])
 def transaction_list(request, format=None):
@@ -415,3 +313,105 @@ def system_part_parent(request, parent_id, format=None):
         system_part = SystemPart.objects.filter(bin_id=parent_id)
         serializer = SystemPartSerializer(system_part, many=True)
         return Response(serializer.data)
+
+
+# PhysicallyMissingPart
+@api_view(["GET", "POST", "PUT", "DELETE"])
+def physically_missing_part_list(request, format=None):
+    if request.method == "GET":
+        physicallyMissingPart = PhysicallyMissingPart.objects.all()
+        serializer = PhysicallyMissingPartSerializer(physicallyMissingPart, many=True)
+        return Response(serializer.data)
+    elif request.method == "POST":
+        serializer = PhysicallyMissingPartSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == "PUT":
+        serializer = PhysicallyMissingPartSerializer(
+            physicallyMissingPart, data=request.data
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == "DELETE":
+        physicallyMissingPart = PhysicallyMissingPart.objects.all()
+        physicallyMissingPart.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(["GET", "PUT", "DELETE"])
+def physically_missing_part_detail(request, id, format=None):
+    try:
+        physicallyMissingPart = PhysicallyMissingPart.objects.get(pk=id)
+    except PhysicallyMissingPart.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        serializer = PhysicallyMissingPartSerializer(physicallyMissingPart)
+        return Response(serializer.data)
+    elif request.method == "PUT":
+        serializer = PhysicallyMissingPartSerializer(
+            physicallyMissingPart, data=request.data
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == "DELETE":
+        physicallyMissingPart.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# SystematicallyMissingPart
+@api_view(["GET", "POST", "PUT", "DELETE"])
+def systematically_missing_part_list(request, format=None):
+    if request.method == "GET":
+        systematicallyMissingPart = SystematicallyMissingPart.objects.all()
+        serializer = SystematicallyMissingPartSerializer(
+            systematicallyMissingPart, many=True
+        )
+        return Response(serializer.data)
+    elif request.method == "POST":
+        serializer = SystematicallyMissingPartSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == "PUT":
+        serializer = SystematicallyMissingPartSerializer(
+            systematicallyMissingPart, data=request.data
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == "DELETE":
+        systematicallyMissingPart = SystematicallyMissingPart.objects.all()
+        systematicallyMissingPart.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(["GET", "PUT", "DELETE"])
+def systematically_missing_part_detail(request, id, format=None):
+    try:
+        systematicallyMissingPart = SystematicallyMissingPart.objects.get(pk=id)
+    except SystematicallyMissingPart.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        serializer = SystematicallyMissingPartSerializer(systematicallyMissingPart)
+        return Response(serializer.data)
+    elif request.method == "PUT":
+        serializer = SystematicallyMissingPartSerializer(
+            systematicallyMissingPart, data=request.data
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == "DELETE":
+        systematicallyMissingPart.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

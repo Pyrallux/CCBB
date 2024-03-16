@@ -12,30 +12,12 @@ class Warehouse(models.Model):
     cycles_per_year = models.IntegerField(blank=True, default=0)
 
 
-class PhysicallyMissingPart(models.Model):
-    physically_missing_part_id = models.AutoField(primary_key=True)
-    number = models.CharField(max_length=100)
-    quantity = models.FloatField()
-    location = models.CharField(max_length=100)
-    date = models.DateField()
-    warehouse_id = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
-
-
-class SystematicallyMissingPart(models.Model):
-    systematically_missing_part_id = models.AutoField(primary_key=True)
-    number = models.CharField(max_length=100)
-    quantity = models.FloatField()
-    location = models.CharField(max_length=100)
-    date = models.DateField()
-    warehouse_id = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
-
-
 class Transaction(models.Model):
     transaction_id = models.AutoField(primary_key=True)
     part_number = models.CharField(max_length=100)
     old_location = models.CharField(max_length=100)
     new_location = models.CharField(max_length=100)
-    quantity = models.FloatField()
+    quantity = models.FloatField(max_length=100)
     date = models.DateField()
     warehouse_id = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
 
@@ -56,7 +38,7 @@ class Bin(models.Model):
 class PresentPart(models.Model):
     present_part_id = models.AutoField(primary_key=True)
     number = models.CharField(max_length=100)
-    quantity = models.FloatField()
+    quantity = models.FloatField(max_length=100)
     bin_id = models.ForeignKey(Bin, on_delete=models.CASCADE)
 
 
@@ -64,4 +46,20 @@ class SystemPart(models.Model):
     system_part_id = models.AutoField(primary_key=True)
     number = models.CharField(max_length=100)
     quantity = models.FloatField(max_length=100)
+    bin_id = models.ForeignKey(Bin, on_delete=models.CASCADE)
+
+
+class PhysicallyMissingPart(models.Model):
+    physically_missing_part_id = models.AutoField(primary_key=True)
+    number = models.CharField(max_length=100)
+    quantity = models.FloatField(max_length=100)
+    date = models.DateField()
+    bin_id = models.ForeignKey(Bin, on_delete=models.CASCADE)
+
+
+class SystematicallyMissingPart(models.Model):
+    systematically_missing_part_id = models.AutoField(primary_key=True)
+    number = models.CharField(max_length=100)
+    quantity = models.FloatField(max_length=100)
+    date = models.DateField()
     bin_id = models.ForeignKey(Bin, on_delete=models.CASCADE)
