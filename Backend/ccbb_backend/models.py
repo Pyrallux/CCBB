@@ -19,6 +19,7 @@ class Transaction(models.Model):
     new_location = models.CharField(max_length=100)
     quantity = models.FloatField(max_length=100)
     date = models.DateField()
+    executed = models.BooleanField()
     warehouse_id = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
 
 

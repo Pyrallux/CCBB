@@ -3,20 +3,22 @@ import { useContext, useState } from "react";
 import { getWarehouseDetail } from "../api/warehousesApi";
 import { useQuery } from "@tanstack/react-query";
 import ButtonGroup from "../components/ButtonGroup";
-import { getPresentParts } from "../api/presentPartsApi";
-import { getSystemParts } from "../api/systemPartsApi";
+import { getPhysicallyMissingParts } from "../api/physicallyMissingPartsApi";
+import { getSystematicallyMissingParts } from "../api/systematicallyMissingPartsApi";
 
-interface PresentPart {
-  present_part_id?: number;
+interface PhysicallyMissingPart {
+  physically_missing_part_id?: number;
   number: string;
   quantity: number;
+  date: Date | string;
   bin_id: number;
 }
 
-interface SystemPart {
-  system_part_id?: number;
+interface SystematicallyMissingPart {
+  systematically_missing_part_id?: number;
   number: string;
   quantity: number;
+  date: Date | string;
   bin_id: number;
 }
 
@@ -25,16 +27,16 @@ function InventoryManager() {
   const [isGeneratingTransactions, setIsGeneratingTransactions] =
     useState(false);
 
-  const { data: presentParts } = useQuery({
+  const { data: physicallyMissingParts } = useQuery({
     // Replace with physically missing parts
-    queryKey: ["getPresentParts"],
-    queryFn: () => getPresentParts(),
+    queryKey: ["getPhysicallyMissingParts"],
+    queryFn: () => getPhysicallyMissingParts(),
   });
 
-  const { data: systemParts } = useQuery({
+  const { data: systematicallyMissingParts } = useQuery({
     // Replace with systematically missing parts
-    queryKey: ["getPresentParts"],
-    queryFn: () => getSystemParts(),
+    queryKey: ["getSystematicallyMissingParts"],
+    queryFn: () => getSystematicallyMissingParts(),
   });
 
   const {
@@ -56,7 +58,30 @@ function InventoryManager() {
 
   const generateTransactions = () => {
     setIsGeneratingTransactions(true);
-    // Logic here
+    let phyiscallyMissingPartMoveList: PhysicallyMissingPart[];
+    let systematicallyMissingPartMoveList: SystematicallyMissingPart[];
+
+    for (let i = 0; i < physicallyMissingParts.length; i++) {
+      // Gets the number of occurances of the current part in the physicallyMissingPartList
+      let physicallyMissingOccurances = physicallyMissingParts.filter(
+        (part: PhysicallyMissingPart) =>
+          part.number == physicallyMissingParts[i].number
+      );
+      // Gets the number of occurances of the current part in the systematicallyMissingPartList
+      let systematicallyMissingOccurances = systematicallyMissingParts.filter(
+        (part: SystematicallyMissingPart) =>
+          part.number == systematicallyMissingParts[i].number
+      );
+
+      if (systematicallyMissingOccurances.length > 0) {
+        if (systematicallyMissingOccurances.length > 1) {
+          // Do something
+        }
+        if (physicallyMissingOccurances.length > 1) {
+          //Do Something
+        }
+      }
+    }
   };
 
   // Shows loading/error screen until query is returned successfully

@@ -12,7 +12,7 @@ interface Props {
   onSelectItem: (index: number) => void;
 }
 
-function Table2Col({
+function Table4Col({
   row1Data,
   row2Data,
   row3Data,
@@ -61,4 +61,4 @@ function Table2Col({
   );
 }
 
-export default Table2Col;
+export default Table4Col;
