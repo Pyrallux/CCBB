@@ -5,22 +5,26 @@ interface Props {
   row2Data: string[];
   row3Data: string[];
   row4Data: string[];
+  row5Data: string[];
   heading1: string;
   heading2: string;
   heading3: string;
   heading4: string;
+  heading5: string;
   onSelectItem: (indexList: number[]) => void;
 }
 
-function Table4Col({
+function Table5Col({
   row1Data,
   row2Data,
   row3Data,
   row4Data,
+  row5Data,
   heading1,
   heading2,
   heading3,
   heading4,
+  heading5,
   onSelectItem,
 }: Props) {
   const [selectedIndex, setSelectedIndex] = useState([-1]);
@@ -34,6 +38,7 @@ function Table4Col({
           <th scope="col">{heading2}</th>
           <th scope="col">{heading3}</th>
           <th scope="col">{heading4}</th>
+          <th scope="col">{heading5}</th>
         </tr>
       </thead>
       <tbody>
@@ -67,6 +72,7 @@ function Table4Col({
             <td>{row2Data[index]}</td>
             <td>{row3Data[index]}</td>
             <td>{row4Data[index]}</td>
+            <td>{row5Data[index]}</td>
           </tr>
         ))}
       </tbody>
@@ -74,4 +80,4 @@ function Table4Col({
   );
 }
 
-export default Table4Col;
+export default Table5Col;

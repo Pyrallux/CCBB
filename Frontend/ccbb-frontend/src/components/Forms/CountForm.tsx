@@ -142,6 +142,7 @@ function CountForm() {
   const { data: physicallyMissingPartData } = useQuery({
     queryKey: ["physicallyMissingPartsCycleCount"],
     queryFn: () => getPhysicallyMissingPartParent(bin),
+    enabled: !!(bin > -1),
     refetchInterval: 10000,
   });
 
@@ -166,6 +167,7 @@ function CountForm() {
   const { data: systematicallyMissingPartData } = useQuery({
     queryKey: ["systematicallyMissingPartsCycleCount"],
     queryFn: () => getSystematicallyMissingPartParent(bin),
+    enabled: !!(bin > -1),
     refetchInterval: 10000,
   });
 
@@ -339,29 +341,36 @@ function CountForm() {
 
   return (
     <>
-      <h1>
-        <b>Enter Details for Bin: {binList[binIndex]}</b>
-      </h1>
-      <div className="container">
-        <div className="row">
-          <div className="col">
-            <h2>
-              <u>Enter Parts Present:</u>
-            </h2>
-            <PartListGroup type="present" />
-          </div>
-          {manual == true && (
-            <div className="col">
-              <h2>
-                <u>Enter Parts in ERP System:</u>
-              </h2>
-              <PartListGroup type="system" />
+      {" "}
+      {bin == -1 ? (
+        <p>Fetching Data From Database...</p>
+      ) : (
+        <>
+          <h1>
+            <b>Enter Details for Bin: {binList[binIndex]}</b>
+          </h1>
+          <div className="container">
+            <div className="row">
+              <div className="col">
+                <h2>
+                  <u>Enter Parts Present:</u>
+                </h2>
+                <PartListGroup type="present" />
+              </div>
+              {manual == true && (
+                <div className="col">
+                  <h2>
+                    <u>Enter Parts in ERP System:</u>
+                  </h2>
+                  <PartListGroup type="system" />
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      </div>
-      <ButtonGroup label="Back" onClick={handleClick} />
-      <ButtonGroup label="Continue" onClick={handleClick} />
+          </div>
+          <ButtonGroup label="Back" onClick={handleClick} />
+          <ButtonGroup label="Continue" onClick={handleClick} />
+        </>
+      )}
     </>
   );
 }

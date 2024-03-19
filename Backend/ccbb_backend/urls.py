@@ -26,10 +26,18 @@ urlpatterns = [
     path("warehouses/<int:id>", views.warehouse_detail),
     path("physically_missing_parts/", views.physically_missing_part_list),
     path("physically_missing_parts/<int:id>", views.physically_missing_part_detail),
+    path(
+        "physically_missing_parts/parent/<int:parent_id>",
+        views.physically_missing_part_parent,
+    ),
     path("systematically_missing_parts/", views.systematically_missing_part_list),
     path(
         "systematically_missing_parts/<int:id>",
         views.systematically_missing_part_detail,
+    ),
+    path(
+        "systematically_missing_parts/parent/<int:parent_id>",
+        views.systematically_missing_part_parent,
     ),
     path("transactions/", views.transaction_list),
     path("transactions/<int:id>", views.transaction_detail),

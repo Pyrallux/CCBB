@@ -365,6 +365,14 @@ def physically_missing_part_detail(request, id, format=None):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@api_view(["GET"])
+def physically_missing_part_parent(request, parent_id, format=None):
+    if request.method == "GET":
+        physically_missing_part = PhysicallyMissingPart.objects.filter(bin_id=parent_id)
+        serializer = PhysicallyMissingPartSerializer(physically_missing_part, many=True)
+        return Response(serializer.data)
+
+
 # SystematicallyMissingPart
 @api_view(["GET", "POST", "PUT", "DELETE"])
 def systematically_missing_part_list(request, format=None):
@@ -415,3 +423,15 @@ def systematically_missing_part_detail(request, id, format=None):
     elif request.method == "DELETE":
         systematicallyMissingPart.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(["GET"])
+def systematically_missing_part_parent(request, parent_id, format=None):
+    if request.method == "GET":
+        systematically_missing_part = SystematicallyMissingPart.objects.filter(
+            bin_id=parent_id
+        )
+        serializer = SystematicallyMissingPartSerializer(
+            systematically_missing_part, many=True
+        )
+        return Response(serializer.data)
