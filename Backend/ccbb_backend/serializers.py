@@ -38,6 +38,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             "new_location",
             "quantity",
             "date",
+            "executed",
             "warehouse_id",
         ]
 
@@ -83,6 +84,7 @@ class PhysicallyMissingPartSerializer(serializers.ModelSerializer):
             "physically_missing_part_id",
             "number",
             "quantity",
+            "location",
             "date",
             "bin_id",
         ]
@@ -97,6 +99,7 @@ class SystematicallyMissingPartSerializer(serializers.ModelSerializer):
             "systematically_missing_part_id",
             "number",
             "quantity",
+            "location",
             "date",
             "bin_id",
         ]

@@ -4,6 +4,7 @@ interface SystematicallyMissingPart {
   systematically_missing_part_id?: number,
   number: string,
   quantity: number,
+  location: string,
   date: Date | string,
   bin_id: number,
 }

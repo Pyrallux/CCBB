@@ -228,6 +228,7 @@ function CountForm() {
             addSystematicallyMissingPartMutation.mutate({
               number: presentParts[i].part_number,
               quantity: quantity_difference,
+              location: binList[binIndex],
               date: format(new Date(), "yyyy-MM-dd"),
               bin_id: bin,
             });
@@ -235,6 +236,7 @@ function CountForm() {
             addPhysicallyMissingPartMutation.mutate({
               number: presentParts[i].part_number,
               quantity: -quantity_difference,
+              location: binList[binIndex],
               date: format(new Date(), "yyyy-MM-dd"),
               bin_id: bin,
             });
@@ -248,6 +250,7 @@ function CountForm() {
       addSystematicallyMissingPartMutation.mutate({
         number: presentPartsNotUsed[i].part_number,
         quantity: presentPartsNotUsed[i].qty,
+        location: binList[binIndex],
         date: format(new Date(), "yyyy-MM-dd"),
         bin_id: bin,
       });
@@ -256,6 +259,7 @@ function CountForm() {
       addPhysicallyMissingPartMutation.mutate({
         number: systemPartsNotUsed[i].part_number,
         quantity: systemPartsNotUsed[i].qty,
+        location: binList[binIndex],
         date: format(new Date(), "yyyy-MM-dd"),
         bin_id: bin,
       });

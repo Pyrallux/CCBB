@@ -54,6 +54,7 @@ class PhysicallyMissingPart(models.Model):
     physically_missing_part_id = models.AutoField(primary_key=True)
     number = models.CharField(max_length=100)
     quantity = models.FloatField(max_length=100)
+    location = models.CharField(max_length=100)
     date = models.DateField()
     bin_id = models.ForeignKey(Bin, on_delete=models.CASCADE)
 
@@ -62,5 +63,6 @@ class SystematicallyMissingPart(models.Model):
     systematically_missing_part_id = models.AutoField(primary_key=True)
     number = models.CharField(max_length=100)
     quantity = models.FloatField(max_length=100)
+    location = models.CharField(max_length=100)
     date = models.DateField()
     bin_id = models.ForeignKey(Bin, on_delete=models.CASCADE)

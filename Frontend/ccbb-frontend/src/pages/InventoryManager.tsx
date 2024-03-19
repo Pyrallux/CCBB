@@ -1,42 +1,52 @@
 import { AppContext } from "../App";
 import { useContext, useState } from "react";
 import { getWarehouseDetail } from "../api/warehousesApi";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import ButtonGroup from "../components/ButtonGroup";
 import { getPhysicallyMissingParts } from "../api/physicallyMissingPartsApi";
 import { getSystematicallyMissingParts } from "../api/systematicallyMissingPartsApi";
+import { format } from "date-fns";
+import { addTransaction, deleteTransaction } from "../api/transactionApi";
 
-interface PhysicallyMissingPart {
-  physically_missing_part_id?: number;
-  number: string;
+interface Transaction {
+  transaction_id?: number;
+  part_number: string;
+  old_location: string;
+  new_location: string;
   quantity: number;
   date: Date | string;
-  bin_id: number;
+  executed: boolean;
+  warehouse_id: number;
 }
 
-interface SystematicallyMissingPart {
-  systematically_missing_part_id?: number;
+interface MissingPart {
+  part_id?: number;
   number: string;
   quantity: number;
+  location: string;
   date: Date | string;
   bin_id: number;
 }
 
 function InventoryManager() {
+  const queryClient = useQueryClient();
   const { whse } = useContext(AppContext);
   const [isGeneratingTransactions, setIsGeneratingTransactions] =
     useState(false);
 
   const { data: physicallyMissingParts } = useQuery({
-    // Replace with physically missing parts
     queryKey: ["getPhysicallyMissingParts"],
     queryFn: () => getPhysicallyMissingParts(),
   });
 
   const { data: systematicallyMissingParts } = useQuery({
-    // Replace with systematically missing parts
     queryKey: ["getSystematicallyMissingParts"],
     queryFn: () => getSystematicallyMissingParts(),
+  });
+
+  const { data: transactions } = useQuery({
+    queryKey: ["getTransactions"],
+    queryFn: () => getPhysicallyMissingParts(),
   });
 
   const {
@@ -49,38 +59,78 @@ function InventoryManager() {
     queryFn: () => getWarehouseDetail(whse),
   });
 
+  const addTransactionMutation = useMutation({
+    mutationFn: addTransaction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getTransactions"] });
+    },
+  });
+
+  const deleteTransactionMutation = useMutation({
+    mutationFn: deleteTransaction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getTransactions"] });
+    },
+  });
+
+  const generateTransactions = () => {
+    console.log("Generating Transcations...");
+    for (let i = 0; i < transactions.length; i++) {
+      if (transactions[i].executed == false) {
+        deleteTransactionMutation.mutate(transactions[i].transaction_id);
+      }
+    }
+
+    let systematicallyMissingPartsList: MissingPart[] =
+      systematicallyMissingParts;
+    let physicallyMissingPartsList: MissingPart[] = physicallyMissingParts;
+    let transactionList: Transaction[] = [];
+
+    for (let i = 0; i < physicallyMissingPartsList.length; i++) {
+      let matchingPartsList: MissingPart[] =
+        systematicallyMissingPartsList.filter(
+          (part: MissingPart) =>
+            part.number == physicallyMissingPartsList[i].number
+        );
+      if (matchingPartsList.length > 0) {
+        let matchingPartsIndex = 0;
+        while (
+          physicallyMissingPartsList[i].quantity > 0 &&
+          matchingPartsIndex < matchingPartsList.length
+        ) {
+          let j = systematicallyMissingParts.indexOf(
+            matchingPartsList[matchingPartsIndex]
+          );
+          let transactionQty =
+            physicallyMissingPartsList[i].quantity >=
+            systematicallyMissingPartsList[j].quantity
+              ? systematicallyMissingPartsList[j].quantity
+              : physicallyMissingPartsList[i].quantity;
+          transactionList.push({
+            part_number: physicallyMissingPartsList[i].number,
+            old_location: physicallyMissingPartsList[i].location,
+            new_location: systematicallyMissingPartsList[j].location,
+            quantity: transactionQty,
+            date: format(new Date(), "yyyy-MM-dd"),
+            executed: false,
+            warehouse_id: whse,
+          });
+          physicallyMissingPartsList[i].quantity -= transactionQty;
+          matchingPartsIndex++;
+        }
+      }
+    }
+
+    for (let i = 0; i < transactionList.length; i++) {
+      addTransactionMutation.mutate(transactionList[i]);
+    }
+    console.log("Transaction Generation Finished!");
+  };
+
   const handleClick = (label: string) => {
     console.log(`Button: ${label} clicked`);
     if (label == "Generate Transactions") {
       generateTransactions();
-    }
-  };
-
-  const generateTransactions = () => {
-    setIsGeneratingTransactions(true);
-    let phyiscallyMissingPartMoveList: PhysicallyMissingPart[];
-    let systematicallyMissingPartMoveList: SystematicallyMissingPart[];
-
-    for (let i = 0; i < physicallyMissingParts.length; i++) {
-      // Gets the number of occurances of the current part in the physicallyMissingPartList
-      let physicallyMissingOccurances = physicallyMissingParts.filter(
-        (part: PhysicallyMissingPart) =>
-          part.number == physicallyMissingParts[i].number
-      );
-      // Gets the number of occurances of the current part in the systematicallyMissingPartList
-      let systematicallyMissingOccurances = systematicallyMissingParts.filter(
-        (part: SystematicallyMissingPart) =>
-          part.number == systematicallyMissingParts[i].number
-      );
-
-      if (systematicallyMissingOccurances.length > 0) {
-        if (systematicallyMissingOccurances.length > 1) {
-          // Do something
-        }
-        if (physicallyMissingOccurances.length > 1) {
-          //Do Something
-        }
-      }
     }
   };
 
@@ -89,8 +139,6 @@ function InventoryManager() {
     return <h1>Fetching Data From Database...</h1>;
   } else if (isError) {
     return <p>{error.message}</p>;
-  } else if (isGeneratingTransactions) {
-    return <h1>Generating Transaction list...</h1>;
   }
 
   return (
