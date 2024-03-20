@@ -41,7 +41,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 USER www-data
 
 # Copy the source code into the container.
-COPY --chown=www-data:www-data ./db.sqlite3 ./
+COPY --chown=www-data:www-data ./data/db.sqlite3 ./
 COPY --chown=www-data:www-data . .
 
 # Expose the port that the application listens on.
