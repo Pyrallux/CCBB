@@ -3,8 +3,16 @@ import { useContext, useState } from "react";
 import { getWarehouseDetail } from "../api/warehousesApi";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import ButtonGroup from "../components/ButtonGroup";
-import { getPhysicallyMissingParts } from "../api/physicallyMissingPartsApi";
-import { getSystematicallyMissingParts } from "../api/systematicallyMissingPartsApi";
+import {
+  deletePhysicallyMissingPart,
+  getPhysicallyMissingParts,
+  updatePhysicallyMissingPart,
+} from "../api/physicallyMissingPartsApi";
+import {
+  deleteSystematicallyMissingPart,
+  getSystematicallyMissingParts,
+  updateSystematicallyMissingPart,
+} from "../api/systematicallyMissingPartsApi";
 import { format } from "date-fns";
 import {
   addTransaction,
@@ -49,13 +57,49 @@ function InventoryManager() {
   const [newLocationList, setNewLocationList] = useState([""]);
 
   const { data: physicallyMissingParts } = useQuery({
-    queryKey: ["getPhysicallyMissingParts"],
+    queryKey: ["physicallyMissingPartsIM"],
     queryFn: () => getPhysicallyMissingParts(),
   });
 
+  const updatePhysicallyMissingPartMutation = useMutation({
+    mutationFn: updatePhysicallyMissingPart,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["physicallyMissingPartsIM"],
+      });
+    },
+  });
+
+  const deletePhysicallyMissingPartMutation = useMutation({
+    mutationFn: deletePhysicallyMissingPart,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["physicallyMissingPartsIM"],
+      });
+    },
+  });
+
   const { data: systematicallyMissingParts } = useQuery({
-    queryKey: ["getSystematicallyMissingParts"],
+    queryKey: ["systematicallyMissingPartsIM"],
     queryFn: () => getSystematicallyMissingParts(),
+  });
+
+  const updateSystematicallyMissingPartMutation = useMutation({
+    mutationFn: updateSystematicallyMissingPart,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["systematicallyMissingPartsIM"],
+      });
+    },
+  });
+
+  const deleteSystematicallyMissingPartMutation = useMutation({
+    mutationFn: deleteSystematicallyMissingPart,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["systematicallyMissingPartsIM"],
+      });
+    },
   });
 
   const { data: transactions } = useQuery({
@@ -176,14 +220,48 @@ function InventoryManager() {
   };
 
   const executeTransactions = () => {
+    let systematicallyMissingPartsList: MissingPart[] =
+      systematicallyMissingParts;
+    let physicallyMissingPartsList: MissingPart[] = physicallyMissingParts;
     for (let i = 0; i < selectedTransactionList.length; i++) {
-      // MISSING Logic to remove transactions from missing part lists
       let not_executed_transactions: Transaction[] = transactions?.filter(
         (transaction: Transaction) => transaction.executed == false
       );
       let transaction = not_executed_transactions[selectedTransactionList[i]];
+
+      let physicallyMissingPart = physicallyMissingPartsList.filter(
+        (part: MissingPart) =>
+          part.number == transaction.part_number &&
+          part.location == transaction.old_location
+      )[0];
+      physicallyMissingPart.quantity -= transaction.quantity;
+      updatePhysicallyMissingPartMutation.mutate(physicallyMissingPart);
+
+      let systematicallyMissingPart = systematicallyMissingPartsList.filter(
+        (part: MissingPart) =>
+          part.number == transaction.part_number &&
+          part.location == transaction.new_location
+      )[0];
+      systematicallyMissingPart.quantity -= transaction.quantity;
+      updateSystematicallyMissingPartMutation.mutate(systematicallyMissingPart);
+
       transaction.executed = true;
       updateTransactionMutation.mutate(transaction);
+    }
+    // Remove all parts from system and missing part lists that have quantity 0
+    for (let i = 0; i < physicallyMissingParts.length; i++) {
+      if (physicallyMissingParts[i].quantity == 0) {
+        deletePhysicallyMissingPartMutation.mutate(
+          physicallyMissingParts[i].part_id
+        );
+      }
+    }
+    for (let i = 0; i < systematicallyMissingParts.length; i++) {
+      if (systematicallyMissingParts[i].quantity == 0) {
+        deleteSystematicallyMissingPartMutation.mutate(
+          systematicallyMissingParts[i].part_id
+        );
+      }
     }
   };
 
@@ -216,7 +294,7 @@ function InventoryManager() {
   return (
     <>
       {isGeneratingTransactions ? (
-        <h1>"Generating Transactions...</h1>
+        <h1>Generating Transactions...</h1>
       ) : (
         <>
           {areTransactionsGenerated ? (
